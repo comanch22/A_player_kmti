@@ -1,0 +1,49 @@
+<resources>
+    <string name="app_name">A_player_kmti</string>
+
+    <string name="aboutApp">about app</string>
+    <string name="delete_all">delete all</string>
+    <string name="delete_all_items">delete all alarms?</string>
+    <string name="delete_ok">OK</string>
+    <string name="delete_cancel">Cancel</string>
+
+    <string name="oss_license">open source licenses \n
+    (click to view)</string>
+
+    <string name="sound_license_1">
+  The sounds of pressing the touch keys, without changes and adaptations, are taken from here. \n
+        \n
+        https://material.io/design/sound/sound-resources \n
+        \n
+  under CC-BY 4.0 license \n
+        \n
+        https://creativecommons.org/licenses/by/4.0/legalcode
+</string>
+    <string name="my_license">
+  Copyright 2022 Comanch. \n
+        \n
+        Licensed under the Apache License, Version 2.0 (the "License"); \n
+        you may not use this file except in compliance with the License. \n
+        You may obtain a copy of the License at \n
+        \n
+        http://www.apache.org/licenses/LICENSE-2.0 \n
+        \n
+        Unless required by applicable law or agreed to in writing, software \n
+  distributed under the License is distributed on an "AS IS" BASIS, \n
+       WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. \n
+       See the License for the specific language governing permissions and \n
+        limitations under the License. \n
+</string>
+    <string name="info_about_app">"simple audio player, dynamic playlist management from the screen, saving playlists and other functions. Enjoy using it!"</string>
+    <string name="timestamp">timestamp:</string>
+    <string name="latitude" translatable="false">latitude:</string>
+    <string name="longitude" translatable="false">longitude:</string>
+    <string name="request_date">request date</string>
+    <string name="iss_location">ISS location</string>
+    <string name="playlist_name">playlist name</string>
+    <string name="default_playlist">default playlist</string>
+    <string name="default_name">default name</string>
+    <string name="enter_name">enter a name</string>
+    <string name="max_list">not saved. Maximum playlists reached (20)</string>
+    <string name="clear_all">clear all</string>
+</resources>

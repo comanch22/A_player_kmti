@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="playlist_name">playlist name</string>
+    <string name="default_playlist">default playlist</string>
+    <string name="default_name">default name</string>
+    <string name="clear_all">clear all</string>
+</resources>

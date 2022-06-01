@@ -1,0 +1,221 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <data>
+
+        <variable
+            name="playViewModel"
+            type="comanch.simpleplayer.playFragment.PlayViewModel" />
+    </data>
+
+    <androidx.constraintlayout.widget.ConstraintLayout style="@style/list_layout">
+
+        <androidx.appcompat.widget.Toolbar
+            android:id="@+id/toolbar"
+            style="@style/list_toolbar"
+            app:layout_constraintBottom_toTopOf="@id/list"
+            app:layout_constraintEnd_toStartOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/guideline22">
+
+            <TextView
+                android:id="@+id/arrow_back"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="start"
+                android:background="@drawable/ic_baseline_detail_arrow_left_36" />
+
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="end"
+                android:layout_marginEnd="32dp"
+                android:orientation="horizontal">
+
+                <TextView
+                    android:id="@+id/up"
+                    android:background="@drawable/ic_baseline_keyboard_double_arrow_up_24"
+                    android:layout_marginEnd="8dp"
+                    android:layout_marginStart="8dp"
+                    style="@style/button_style"/>
+
+                <TextView
+                    android:id="@+id/down"
+                    android:background="@drawable/ic_baseline_keyboard_double_arrow_down_24"
+                    android:layout_marginEnd="24dp"
+                    style="@style/button_style"/>
+
+                <TextView
+                    android:id="@+id/repeat"
+                    android:layout_marginEnd="20dp"
+                    android:background="@drawable/ic_baseline_repeat_off_48"
+                    style="@style/button_style"/>
+
+                <TextView
+                    android:id="@+id/shuffle"
+                    android:layout_marginEnd="20dp"
+                    android:background="@drawable/ic_baseline_shuffle_24"
+                    style="@style/button_style"/>
+
+                <TextView
+                    android:id="@+id/sort"
+                    android:background="@drawable/ic_baseline_sort_24"
+                    style="@style/button_style"/>
+            </LinearLayout>
+
+        </androidx.appcompat.widget.Toolbar>
+
+        <androidx.recyclerview.widget.RecyclerView
+
+            android:id="@+id/list"
+            style="@style/list_recycle"
+            app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
+            android:layout_marginTop="20dp"
+            app:layout_constraintBottom_toTopOf="@id/guideline16"
+            app:layout_constraintEnd_toEndOf="@id/guideline19"
+            app:layout_constraintHorizontal_bias="0.0"
+            app:layout_constraintStart_toStartOf="@id/guideline20"
+            app:layout_constraintTop_toBottomOf="@id/toolbar" />
+
+        <TextView
+            android:id="@+id/currentTrack"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:gravity="center"
+            android:textSize="16sp"
+            app:layout_constraintBottom_toTopOf="@id/guideline7"
+            app:layout_constraintEnd_toEndOf="@id/guideline19"
+            app:layout_constraintStart_toStartOf="@id/guideline20"
+            app:layout_constraintTop_toBottomOf="@id/guideline16" />
+
+        <TextView
+            android:id="@+id/save"
+            android:background="@drawable/ic_baseline_save_48"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toStartOf="@id/delete"
+            app:layout_constraintStart_toStartOf="@id/guideline20"
+            app:layout_constraintTop_toBottomOf="@id/guideline7"
+            style="@style/button_style" />
+
+        <TextView
+            android:id="@+id/delete"
+            android:background="@drawable/ic_baseline_clear_48"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="@id/guideline3"
+            app:layout_constraintStart_toEndOf="@id/save"
+            app:layout_constraintTop_toBottomOf="@id/guideline7"
+            style="@style/button_style"/>
+
+
+        <TextView
+            android:id="@+id/previous"
+            android:layout_marginStart="16dp"
+            android:background="@drawable/ic_baseline_skip_previous_48"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toStartOf="@id/stop"
+            app:layout_constraintStart_toEndOf="@id/guideline3"
+            app:layout_constraintTop_toBottomOf="@id/guideline7"
+            style="@style/button_style"/>
+
+        <TextView
+            android:id="@+id/stop"
+            android:background="@drawable/ic_baseline_stop_48"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toStartOf="@id/play"
+            app:layout_constraintStart_toEndOf="@id/previous"
+            app:layout_constraintTop_toBottomOf="@id/guideline7"
+            style="@style/button_style"/>
+
+        <TextView
+            android:id="@+id/pause"
+            android:background="@drawable/ic_baseline_pause_48"
+            android:visibility="invisible"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toStartOf="@id/next"
+            app:layout_constraintStart_toEndOf="@id/stop"
+            app:layout_constraintTop_toBottomOf="@id/guideline7"
+            style="@style/button_style"/>
+
+        <TextView
+            android:id="@+id/play"
+            android:background="@drawable/ic_baseline_play_arrow_48"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toStartOf="@id/next"
+            app:layout_constraintStart_toEndOf="@id/stop"
+            app:layout_constraintTop_toBottomOf="@id/guideline7"
+            style="@style/button_style"/>
+
+        <TextView
+            android:id="@+id/next"
+            android:background="@drawable/ic_baseline_skip_next_48"
+            app:layout_constraintBottom_toBottomOf="parent"
+            android:layout_marginEnd="8dp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toEndOf="@id/play"
+            app:layout_constraintTop_toBottomOf="@id/guideline7"
+            style="@style/button_style"/>
+
+        <androidx.appcompat.widget.LinearLayoutCompat
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            app:layout_constraintBottom_toTopOf="@+id/guideline7"
+            app:layout_constraintEnd_toStartOf="@+id/guideline19"
+            app:layout_constraintStart_toEndOf="@+id/guideline20"
+            app:layout_constraintTop_toBottomOf="@+id/guideline16">
+
+            <com.google.android.material.slider.Slider
+                android:id="@+id/seekbar"
+                android:layout_width="0dp"
+                android:valueFrom="0.0"
+                android:valueTo="200.0"
+                app:trackHeight="20dp"
+                app:labelBehavior="gone"
+                app:thumbRadius="10dp"
+                app:thumbColor="@color/colorSeekDark"
+                app:trackColorInactive="@color/colorSeekLight"
+                app:trackColorActive="@color/colorSeekDark"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:clickable="false"
+                android:focusable="false" />
+
+        </androidx.appcompat.widget.LinearLayoutCompat>
+
+        <androidx.constraintlayout.widget.Guideline
+            android:id="@+id/guideline16"
+            style="@style/list_guideline_hor"
+            app:layout_constraintGuide_end="120dp" />
+
+        <androidx.constraintlayout.widget.Guideline
+            android:id="@+id/guideline22"
+            style="@style/list_guideline_hor"
+            app:layout_constraintGuide_begin="8dp" />
+
+        <androidx.constraintlayout.widget.Guideline
+            android:id="@+id/guideline19"
+            style="@style/list_guideline_ver"
+            app:layout_constraintGuide_end="8dp" />
+
+        <androidx.constraintlayout.widget.Guideline
+            android:id="@+id/guideline20"
+            style="@style/list_guideline_ver"
+            app:layout_constraintGuide_begin="8dp" />
+
+        <androidx.constraintlayout.widget.Guideline
+            android:id="@+id/guideline7"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            app:layout_constraintGuide_end="72dp" />
+
+        <androidx.constraintlayout.widget.Guideline
+            android:id="@+id/guideline3"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            app:layout_constraintGuide_begin="160dp" />
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+</layout>

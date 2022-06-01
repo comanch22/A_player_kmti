@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <data>
+
+        <variable
+            name="item"
+            type="comanch.simpleplayer.dataBase.PlayList" />
+
+        <variable
+            name="clickListener"
+            type="comanch.simpleplayer.playListFragment.PlayListItemListener" />
+    </data>
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/itemLayout"
+        android:layout_width="match_parent"
+        android:layout_height="56dp"
+        android:layout_marginTop="4dp"
+        android:background="@drawable/rectangle_for_folder_name"
+        android:onClick="@{() -> clickListener.onClick(item)}"
+        android:soundEffectsEnabled="false">
+
+        <TextView
+            android:id="@+id/name"
+            style="@style/list_size14"
+            android:gravity="center"
+            android:stateListAnimator="@animator/click_scale_anim"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+</layout>
