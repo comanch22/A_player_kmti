@@ -2,28 +2,28 @@
 
     <style name="Theme.SimplePlayer" parent="Theme.MaterialComponents.DayNight.NoActionBar">
 
-        <item name="colorPrimary">@color/colorPrimaryVariantBlue</item>
+        <item name="colorPrimary">@color/primaryColor</item>
         <item name="colorPrimaryVariant">@color/colorPrimaryLight</item>
-        <item name="colorControlNormal">@color/colorPrimaryVariantBlue</item>
+        <item name="colorControlNormal">@color/primaryColor</item>
         <item name="android:windowLightStatusBar">true</item>
         <item name="android:statusBarColor">?attr/colorPrimaryVariant</item>
 
-        <item name="colorPrimaryDark">@color/colorPrimaryVariantBlue</item>
+        <item name="colorPrimaryDark">@color/primaryColor</item>
         <!-- Secondary brand color. -->
         <item name="colorSecondary">@color/black</item>
-        <item name="colorOnBackground">@color/colorPrimaryVariantBlue</item>
+        <item name="colorOnBackground">@color/primaryColor</item>
         <!-- Status bar color. -->
 
         <!-- Customize your theme here. -->
         <item name="colorSwitchThumbNormal">#BBC8D3</item>
-        <item name="colorControlActivated">#280763</item>
+        <item name="colorControlActivated">@color/primaryColor</item>
         <item name="popupTheme">@style/PopupStarTrack</item>
         <item name="android:soundEffectsEnabled">false</item>
 
     </style>
 
     <style name="PopupStarTrack" parent="Theme.AppCompat">
-        <item name="android:colorBackground">@color/colorPrimaryVariantBlue</item>
+        <item name="android:colorBackground">@color/colorPrimaryLight</item>
         <item name="android:textColor">#253E49</item>
     </style>
 

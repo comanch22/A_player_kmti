@@ -4,4 +4,10 @@
     <item
         android:id="@+id/about_app"
         android:title="@string/aboutApp" />
+    <item
+        android:id="@+id/action_settings"
+        android:title="@string/settings_title" />
+    <item
+        android:id="@+id/action_images"
+        android:title="@string/pictures" />
 </menu>

@@ -2,9 +2,9 @@
 
     <style name="Theme.SimplePlayer" parent="Theme.MaterialComponents.DayNight.NoActionBar">
 
-        <item name="colorPrimary">@color/colorPrimaryVariantBlue</item>
+        <item name="colorPrimary">@color/primaryColor</item>
         <item name="colorPrimaryVariant">#CCE7F4</item>
-        <item name="colorControlNormal">@color/colorPrimaryVariantBlue</item>
+        <item name="colorControlNormal">@color/primaryColor</item>
         <item name="android:windowLightStatusBar">true</item>
         <item name="android:statusBarColor">?attr/colorPrimaryVariant</item>
 
@@ -18,7 +18,7 @@
     </style>
 
     <style name="PopupStarTrack" parent="Theme.AppCompat">
-        <item name="android:colorBackground">@color/colorPrimaryVariantBlue</item>
+        <item name="android:colorBackground">@color/primaryColor</item>
         <item name="android:textColor">@color/colorSecondaryBlue</item>
     </style>
 
@@ -42,14 +42,14 @@
         <item name="android:gravity">center</item>
         <item name="android:buttonBarNegativeButtonStyle">@style/AlertDialogNeutralButtonStyle</item>
         <item name="android:buttonBarPositiveButtonStyle">@style/AlertDialogNeutralButtonStyle</item>
-        <item name="android:backgroundTint">@color/colorPrimaryVariantBlue</item>
-        <item name="android:background">@color/colorPrimaryVariantBlue</item>
+        <item name="android:backgroundTint">@color/primaryColor</item>
+        <item name="android:background">@color/primaryColor</item>
     </style>
 
     <style name="AlertDialogNeutralButtonStyle" parent="Widget.MaterialComponents.Button.TextButton.Dialog">
         <item name="android:textColor">@color/colorSecondaryBlue</item>
-        <item name="backgroundTint">@color/colorPrimaryVariantBlue</item>
-        <item name="background">@color/colorPrimaryVariantBlue</item>
+        <item name="backgroundTint">@color/primaryColor</item>
+        <item name="background">@color/primaryColor</item>
         <item name="android:gravity">start</item>
         <item name="android:foregroundGravity">left</item>
         <item name="android:layout_gravity">start</item>

@@ -4,7 +4,6 @@
 
     <string name="aboutApp">о приложении</string>
     <string name="info_about_app">простой аудиоплеер, динамическое управление списком воспроизведения с экрана, сохранение плейлистов и другие функции. Приятного использования!</string>
-    <string name="delete_all_items">удалить все будильники?</string>
     <string name="delete_ok">OK</string>
     <string name="delete_cancel">Закрыть</string>
 
@@ -35,14 +34,16 @@
        See the License for the specific language governing permissions and \n
         limitations under the License. \n
 </string>
-    <string name="timestamp">timestamp:</string>
     <string name="delete_all">удалить все</string>
     <string name="request_date">дата запроса</string>
-    <string name="iss_location">ISS location</string>
     <string name="playlist_name">название плейлиста</string>
     <string name="default_playlist">плейлист по умолчанию</string>
     <string name="default_name">название плейлиста</string>
     <string name="enter_name">введите название</string>
     <string name="max_list">Не сохранено. Достигнут максимум плейлистов (20)</string>
-    <string name="clear_all">clear all</string>
+    <string name="clear_all">очистить все</string>
+    <string name="settings_title">настройки</string>
+    <string name="back_button">вернуться назад</string>
+    <string name="auto_scrolling">авто прокрутка</string>
+    <string name="pictures">pictures</string>
 </resources>

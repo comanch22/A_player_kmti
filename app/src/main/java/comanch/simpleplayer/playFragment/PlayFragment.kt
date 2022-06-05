@@ -42,9 +42,13 @@ class PlayFragment : Fragment() {
     private var isRepeat: Boolean = false
     private var pos = 0
     private val job: CompositeJob = CompositeJob()
+    private var isAutoScroll = true
 
     @Inject
     lateinit var soundPoolContainer: SoundPoolForFragments
+
+    @Inject
+    lateinit var preferences: DefaultPreference
 
     @Inject
     lateinit var navigation: NavigationBetweenFragments
@@ -55,7 +59,9 @@ class PlayFragment : Fragment() {
         override fun onPlaybackStateChanged(state: PlaybackStateCompat) {
             stateViewModel.setIsPlaying(state.state == PlaybackStateCompat.STATE_PLAYING)
             Log.e("fgdgdgdgdfgdfg", "${state.state}")
-            playViewModel.scrollList()
+            if (isAutoScroll) {
+                playViewModel.scrollList()
+            }
         }
     }
 
@@ -108,6 +114,8 @@ class PlayFragment : Fragment() {
         soundPoolContainer.soundPool.setOnLoadCompleteListener { _, sampleId, status ->
             soundPoolContainer.soundMap[sampleId] = status
         }
+
+        isAutoScroll = preferences.getBoolean(PreferenceKeys.isAutoScroll)
 
         savedInstanceState?.getBoolean("isRepeat", false)?.let {
             isRepeat = it
@@ -437,6 +445,7 @@ class PlayFragment : Fragment() {
 
     override fun onResume() {
         super.onResume()
+        isAutoScroll = preferences.getBoolean(PreferenceKeys.isAutoScroll)
         soundPoolContainer.setTouchSound()
     }
 

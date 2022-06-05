@@ -232,6 +232,22 @@ class ListFragment : Fragment() {
             )
             true
         }
+        R.id.action_settings -> {
+            soundPoolContainer.playSoundIfEnable(soundPoolContainer.soundButtonTap)
+            navigation.navigateToDestination(
+                this,
+                ListFragmentDirections.actionListFragmentToSettingsFragment()
+            )
+            true
+        }
+        R.id.action_images -> {
+            soundPoolContainer.playSoundIfEnable(soundPoolContainer.soundButtonTap)
+            navigation.navigateToDestination(
+                this,
+                ListFragmentDirections.actionListFragmentToImageFragment()
+            )
+            true
+        }
         else -> false
     }
 }

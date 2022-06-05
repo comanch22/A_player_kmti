@@ -1,0 +1,110 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <data>
+        <variable
+            name="detailViewModel"
+            type="comanch.simpleplayer.detailFragment.DetailViewModel" />
+    </data>
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        style="@style/list_layout">
+
+        <androidx.appcompat.widget.Toolbar
+            android:id="@+id/toolbar"
+            app:layout_constraintBottom_toTopOf="@id/guideline10"
+            app:layout_constraintEnd_toStartOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            style="@style/list_toolbar">
+            <TextView
+                android:id="@+id/arrow_back"
+                android:layout_height="wrap_content"
+                android:layout_width="wrap_content"
+                android:background="@drawable/ic_baseline_detail_arrow_left_36"
+                android:layout_gravity="start"
+                />
+        </androidx.appcompat.widget.Toolbar>
+
+
+        <ImageView
+            android:id="@+id/imagePreview"
+            android:layout_width="0dp"
+            android:layout_height="120dp"
+            android:clickable="true"
+            android:focusable="true"
+            android:layout_marginTop="16dp"
+            android:soundEffectsEnabled="false"
+            app:layout_constraintBottom_toTopOf="@id/choicePreview"
+            app:layout_constraintEnd_toStartOf="@id/guideline19"
+            app:layout_constraintStart_toStartOf="@id/guideline20"
+            app:layout_constraintTop_toBottomOf="@id/guideline10"
+            />
+
+        <TextView
+            android:id="@+id/choicePreview"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:gravity="center"
+            android:layout_marginTop="16dp"
+            android:text="choicePreview"
+            android:textColor="?attr/colorSecondary"
+            android:textSize="18sp"
+            app:layout_constraintBottom_toTopOf="@id/imagePlayScreen"
+            app:layout_constraintEnd_toStartOf="@id/guideline19"
+            app:layout_constraintStart_toStartOf="@id/guideline20"
+            app:layout_constraintTop_toBottomOf="@id/imagePreview" />
+
+        <ImageView
+            android:id="@+id/imagePlayScreen"
+            android:layout_width="180dp"
+            android:layout_height="240dp"
+            android:layout_marginTop="16dp"
+            android:clickable="true"
+            android:focusable="true"
+            android:soundEffectsEnabled="false"
+            app:layout_constraintBottom_toTopOf="@id/choicePlayScreen"
+            app:layout_constraintEnd_toStartOf="@id/guideline19"
+            app:layout_constraintStart_toStartOf="@id/guideline20"
+            app:layout_constraintTop_toBottomOf="@id/choicePreview" />
+
+        <TextView
+            android:id="@+id/choicePlayScreen"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:gravity="center"
+            android:layout_marginTop="16dp"
+            android:text="choicePlayScreen"
+            android:textColor="?attr/colorSecondary"
+            android:textSize="18sp"
+            app:layout_constraintBottom_toTopOf="@id/guideline17"
+            app:layout_constraintEnd_toStartOf="@id/guideline19"
+            app:layout_constraintStart_toStartOf="@id/guideline20"
+            app:layout_constraintTop_toBottomOf="@id/imagePlayScreen" />
+
+        <androidx.constraintlayout.widget.Guideline
+            android:id="@+id/guideline17"
+            style="@style/list_guideline_hor"
+            app:layout_constraintGuide_end="24dp" />
+
+        <androidx.constraintlayout.widget.Guideline
+            android:id="@+id/guideline19"
+            style="@style/list_guideline_ver"
+            app:layout_constraintGuide_end="8dp" />
+
+        <androidx.constraintlayout.widget.Guideline
+            android:id="@+id/guideline20"
+            style="@style/list_guideline_ver"
+            app:layout_constraintGuide_begin="8dp" />
+
+        <androidx.constraintlayout.widget.Guideline
+            android:id="@+id/guideline10"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            app:layout_constraintGuide_begin="64dp" />
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+</layout>

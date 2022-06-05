@@ -10,7 +10,7 @@
 
     <color name="launchTextColor">#7FB5DF</color>
 
-    <color name="colorPrimaryVariantBlue">#596C7A</color>
+    <color name="primaryColor">#596C7A</color>
     <color name="colorPrimaryLight">#A8B5BF</color>
     <color name="colorSecondaryBlue">#FF000000</color>
     <color name="colorSeekLight">#BBC8D3</color>

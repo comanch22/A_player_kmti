@@ -2,6 +2,8 @@ package comanch.simpleplayer
 
 import android.app.*
 import android.content.*
+import android.graphics.Bitmap
+import android.graphics.ImageDecoder
 import android.media.*
 import android.media.AudioManager.ACTION_AUDIO_BECOMING_NOISY
 import android.media.AudioManager.OnAudioFocusChangeListener
@@ -35,7 +37,12 @@ class ServicePlay : Service(),
 
     @Inject
     lateinit var databaseMusic: MusicTrackDAO
+
+    @Inject
+    lateinit var preferences: DefaultPreference
+
     private val job: CompositeJob = CompositeJob()
+    private var previewUri: Uri? = null
 
     private var mMediaPlayer: MediaPlayer? = null
     private var audioManager: AudioManager? = null
@@ -85,6 +92,12 @@ class ServicePlay : Service(),
             setFlags(MediaSessionCompat.FLAG_HANDLES_MEDIA_BUTTONS or MediaSessionCompat.FLAG_HANDLES_TRANSPORT_CONTROLS)
             setPlaybackState(stateBuilder.build())
             setCallback(mediaCallback)
+        }
+
+        try {
+            previewUri = Uri.parse(preferences.getString("previewUri"))
+        }catch (e: Exception){
+            //
         }
 
         val activityIntent = Intent(context, MainActivity::class.java)
@@ -266,7 +279,7 @@ class ServicePlay : Service(),
 
     private fun updateMetadata(duration: Long = 0L) {
         metadataBuilder.putString(MediaMetadataCompat.METADATA_KEY_TITLE, currentTrack?.title)
-        metadataBuilder.putString(MediaMetadataCompat.METADATA_KEY_ALBUM, currentTrack?.album)
+      //  metadataBuilder.putString(MediaMetadataCompat.METADATA_KEY_ALBUM, currentTrack?.album)
         metadataBuilder.putString(
             MediaMetadataCompat.METADATA_KEY_ARTIST,
             currentTrack?.artist
@@ -275,6 +288,7 @@ class ServicePlay : Service(),
             MediaMetadataCompat.METADATA_KEY_DURATION,
             if (duration == 0L) parseDuration(currentTrack?.duration ?: "0") else duration
         )
+       // metadataBuilder.putBitmap()
         mediaSession!!.setMetadata(metadataBuilder.build())
     }
 
@@ -494,6 +508,15 @@ class ServicePlay : Service(),
 
     private fun getNotification(state: Int): Notification {
 
+        var largeIcon: Bitmap? = null
+        if (previewUri != null){
+            largeIcon = try {
+                ImageDecoder.decodeBitmap(ImageDecoder.createSource(contentResolver, previewUri!!))
+            }catch (e: Exception){
+                null
+            }
+        }
+
         val builder: NotificationCompat.Builder = fromHelper(this, mediaSession!!)
             .addAction(
                 NotificationCompat.Action(
@@ -570,6 +593,10 @@ class ServicePlay : Service(),
             )
             .setOnlyAlertOnce(true)
             .setChannelId(channelId)
+
+        if (largeIcon != null){
+            builder.setLargeIcon(largeIcon)
+        }
 
         return builder.build()
     }
