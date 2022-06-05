@@ -18,3 +18,5 @@ it is possible to create or delete playlists, the last playlist is automatically
 <p align="left">
   <img src="https://github.com/comanch22/ValleyWindAwake/blob/main/Screenshot_20220601-225217_A_player_kmti.jpg" width="144" height="256">
 </p>
+
+It is planned to improve the design and customization
