@@ -10,13 +10,13 @@
     <style name="list_layout">
         <item name="android:layout_width">match_parent</item>
         <item name="android:layout_height">match_parent</item>
-        <item name="android:background">?attr/colorPrimaryVariant</item>
+        <item name="android:background">@drawable/gradient_background_main</item>
     </style>
 
     <style name="list_recycle">
         <item name="android:layout_width">0dp</item>
         <item name="android:layout_height">0dp</item>
-        <item name="android:background">?attr/colorPrimaryVariant</item>
+        <item name="android:background">@color/transparent_background100</item>
     </style>
 
     <style name="list_fab_button">
@@ -25,8 +25,7 @@
         <item name="android:clickable">true</item>
         <item name="borderWidth">0dp</item>
         <item name="android:focusable">true</item>
-        <item name="android:backgroundTint">?attr/colorPrimary</item>
-        <item name="android:soundEffectsEnabled">false</item>
+        <item name="android:backgroundTint">?attr/colorPrimaryVariant</item>
         <item name="android:textColor">?attr/colorSecondary</item>
         <item name="android:layout_gravity">start|bottom</item>
     </style>

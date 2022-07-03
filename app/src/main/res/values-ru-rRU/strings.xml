@@ -10,6 +10,20 @@
     <string name="oss_license">лицензии продуктов с открытым исходным кодом. \n
     (нажать для просмотра) </string>
 
+    <string name="info_about_font">
+        шрифт проекта \n
+        \n
+        Copyright 2011 The Comfortaa Project Authors \n
+        (https://github.com/alexeiva/comfortaa), \n
+        with Reserved Font Name "Comfortaa". \n
+        \n
+        This Font Software is licensed under \n
+        the SIL Open Font License, Version 1.1. \n
+        This license is copied below,  \n
+        and is also available with a FAQ at: \n
+        http://scripts.sil.org/OFL \n
+    </string>
+
     <string name="sound_license_1">
   Звуки нажатия сенсорных клавиш, без изменений и адаптации, взяты отсюда. \n
         \n
@@ -45,5 +59,47 @@
     <string name="settings_title">настройки</string>
     <string name="back_button">вернуться назад</string>
     <string name="auto_scrolling">авто прокрутка</string>
-    <string name="pictures">pictures</string>
+    <string name="pictures">фоны</string>
+    <string name="preview_picture">картинка превью</string>
+    <string name="choice_preview_picture">выберите картинку</string>
+    <string name="play_screen_picture">картинка экрана воспроизведения</string>
+    <string name="choice_play_screen_picture">выберите картинку</string>
+    <string name="picture_to_the_notification">картинка для фона уведомления</string>
+    <string name="choicePlayScreen">картинка для фона экрана воспроизведения</string>
+    <string name="setScreensaverDuration">установите задержку заставки</string>
+    <string name="screensaverDuration">примерная задержка перед появлением заставки</string>
+    <string name="screenSaverIsOn">Показывать экранную заставку</string>
+    <string name="auto_scrollinSummary">автоматическая прокрутка списка треков при переключении на другую мелодию</string>
+    <string name="screenSaverIsOnSummary">включите показ заставки на странице воспроизведения</string>
+    <string name="forward_button">кнопка вперед</string>
+    <string name="previous_button">кнопка \"предыдущий\"</string>
+    <string name="next_button">кнопка \"следующий\"</string>
+    <string name="play_button">кнопка \"воспроизведение\"</string>
+    <string name="pause_button">кнопка \"пауза\"</string>
+    <string name="stop_button">кнопка \"стоп\"</string>
+    <string name="shuffle_button">кнопка \"перемещать список\"</string>
+    <string name="sort_button">кнопка \"упорядочить список\"</string>
+    <string name="repeat_list_button">кнопка \"повтор плейлиста\"</string>
+    <string name="repeat_track_button">кнопка \"повтор трека\"</string>
+    <string name="repeat_off_button">кнопка \"отключить повтор\"</string>
+    <string name="scrolling_to_top">кнопка \"пролистать вверх\"</string>
+    <string name="scrolling_to_bottom">кнопка \"пролистать вниз\"</string>
+    <string name="choose_playlist">кнопка \"выбрать плейлист\"</string>
+    <string name="save_playlist_button">сохранить плейлист</string>
+    <string name="delete_tracks_button">удалить выбранные треки</string>
+    <string name="delete_playlist_button">удалить выбранный плейлист</string>
+    <string name="open_folder">открыть каталог</string>
+    <string name="appStyle">стиль приложения</string>
+    <string name="setAppStyle">выберите стиль приложения</string>
+    <string name="screensaverOption">экран заставки</string>
+    <string name="empty_list">плейлист пуст</string>
+    <string name="select_images">выберите фоновые изображения</string>
+    <string name="duration_to_time">%1$s:%2$s</string>
+    <string name="start_time">00:00</string>
+    <string name="hide_the_control_panel">скрыть панельу правления</string>
+    <string name="open_the_control_panel">открыть панель управления</string>
+    <string name="screensaver">это заставка, нажмите, чтобы вернуться к списку воспроизведения</string>
+    <string name="license">лицензии</string>
+    <string name="image_error">изображение заставки недоступно</string>
+    <string name="triangle">&#9655;</string>
 </resources>

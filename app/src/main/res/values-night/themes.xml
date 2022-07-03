@@ -2,24 +2,114 @@
 
     <style name="Theme.SimplePlayer" parent="Theme.MaterialComponents.DayNight.NoActionBar">
 
-        <item name="colorPrimary">@color/primaryColor</item>
-        <item name="colorPrimaryVariant">#CCE7F4</item>
-        <item name="colorControlNormal">@color/primaryColor</item>
-        <item name="android:windowLightStatusBar">true</item>
+        <item name="fontFamily">@font/comfortaa_family</item>
+
+        <!-- control color. -->
+        <item name="colorPrimary">@color/controlMain</item>
+
+        <!-- background color. -->
+        <item name="colorPrimaryVariant">@color/backgroundMain</item>
+        <item name="colorOnPrimary">@color/backgroundMain2</item>
+
+        <item name="android:windowLightStatusBar">false</item>
         <item name="android:statusBarColor">?attr/colorPrimaryVariant</item>
 
+        <!-- text color. -->
+        <item name="colorSecondary">@color/colorTextMain</item>
+        <!-- text color secondary. -->
+        <item name="colorOnSecondary">@color/colorTextSecondaryMain</item>
+        <!-- text hint. -->
+        <item name="colorSurfaceVariant">@color/colorTextHintMain</item>
 
+        <!-- switch. -->
+        <item name="colorSwitchThumbNormal">@color/backgroundMain2</item>
+        <item name="colorControlActivated">@color/colorControlInactiveMain</item>
 
-        <item name="colorSwitchThumbNormal">@color/teal_200</item>
-        <item name="colorControlActivated">#280763</item>
-        <item name="popupTheme">@style/PopupStarTrack</item>
-        <item name="android:soundEffectsEnabled">false</item>
+        <!-- slider. -->
+        <item name="colorOnTertiary">@color/control_active_transparent_main</item>
+        <item name="colorTertiary">@color/colorControlActiveMain</item>
+
+        <!-- popupTheme. -->
+        <item name="popupTheme">@style/PopupTheme</item>
+
+        <!-- ripple. -->
+        <item name="colorControlHighlight">@color/colorRippleMain</item>
+
+        <!-- menu. -->
+        <item name="actionOverflowButtonStyle">@style/myActionOverflowButtonStyle</item>
+
+        <!-- alertDialog theme. -->
+        <item name="alertDialogTheme">@style/AlertDialogCustom</item>
 
     </style>
 
-    <style name="PopupStarTrack" parent="Theme.AppCompat">
-        <item name="android:colorBackground">@color/primaryColor</item>
-        <item name="android:textColor">@color/colorSecondaryBlue</item>
+    <style name="Theme.SimplePlayerLight" parent="Theme.MaterialComponents.DayNight.NoActionBar">
+
+        <item name="fontFamily">@font/comfortaa_family</item>
+
+        <!-- control color. -->
+        <item name="colorPrimary">@color/controlLight</item>
+
+        <!-- background color. -->
+        <item name="colorPrimaryVariant">@color/backgroundLight</item>
+        <item name="colorOnPrimary">@color/backgroundLight2</item>
+
+        <item name="android:windowLightStatusBar">true</item>
+        <item name="android:statusBarColor">?attr/colorPrimaryVariant</item>
+
+        <!-- text color. -->
+        <item name="colorSecondary">@color/colorTextLight</item>
+        <!-- text color secondary. -->
+        <item name="colorOnSecondary">@color/colorTextSecondaryLight</item>
+        <!-- text hint. -->
+        <item name="colorSurfaceVariant">@color/colorTextHintLight</item>
+
+        <!-- switch. -->
+        <item name="colorSwitchThumbNormal">@color/backgroundLight2</item>
+        <item name="colorControlActivated">@color/controlLight</item>
+
+        <!-- slider. -->
+        <item name="colorOnTertiary">@color/control_active_transparent_light</item>
+        <item name="colorTertiary">@color/colorControlActiveLight</item>
+
+        <!-- popupTheme. -->
+        <item name="popupTheme">@style/PopupTheme</item>
+
+        <!-- ripple. -->
+        <item name="colorControlHighlight">@color/colorRippleLight</item>
+
+        <!-- menu. -->
+        <item name="actionOverflowButtonStyle">@style/myActionOverflowButtonStyle</item>
+
+        <!-- alertDialog theme. -->
+        <item name="alertDialogTheme">@style/AlertDialogCustom</item>
+
+    </style>
+
+    <style name="AlertDialogCustom" parent="Theme.AppCompat.DayNight.Dialog.Alert">
+        <item name="android:headerDividersEnabled">true</item>
+        <item name="android:typeface">normal</item>
+        <item name="android:gravity">center</item>
+        <item name="android:textColor">?attr/colorSecondary</item>
+        <item name="android:colorBackground">@color/transparent_background100</item>
+        <item name="textColorAlertDialogListItem">?attr/colorSecondary</item>
+        <item name="android:background">@drawable/rectangle_for_dialog</item>
+        <item name="buttonBarPositiveButtonStyle">@style/ButtonStyle</item>
+        <item name="buttonBarNegativeButtonStyle">@style/ButtonStyle</item>
+        <item name="buttonBarNeutralButtonStyle">@style/ButtonStyle</item>
+    </style>
+
+    <style name="ButtonStyle" parent="@style/Widget.MaterialComponents.Button.TextButton.Dialog">
+        <item name="android:textColor">?attr/colorSecondary</item>
+    </style>
+
+    <style name="PopupTheme" parent="Theme.AppCompat">
+        <item name="android:colorBackground">?attr/colorOnPrimary</item>
+        <item name="android:textColor">?attr/colorSecondary</item>
+    </style>
+
+    <style name="myActionOverflowButtonStyle" parent="Widget.AppCompat.ActionButton.Overflow">
+        <item name="android:tint">?attr/colorPrimary</item>
     </style>
 
     <style name="LaunchTheme" parent="Theme.AppCompat.NoActionBar">
@@ -29,30 +119,11 @@
     <style name="licensesTheme" parent="Theme.AppCompat.DayNight.DarkActionBar">
 
         <item name="colorPrimary">@color/black</item>
-        <item name="android:textColor">@color/launchTextColor</item>
+        <item name="android:textColor">@color/textColorLight</item>
         <item name="android:homeAsUpIndicator">@drawable/license_activity_back_arrow</item>
-        <item name="titleTextColor">@color/launchTextColor</item>
-        <item name="android:colorForeground">@color/launchTextColor</item>
+        <item name="titleTextColor">@color/textColorLight</item>
+        <item name="android:colorForeground">@color/textColorLight</item>
         <item name="android:colorBackground">@color/black</item>
-    </style>
-
-    <style name="AlertDialogCustom" parent="@android:style/Theme.Dialog">
-        <item name="android:headerDividersEnabled">true</item>
-        <item name="android:typeface">normal</item>
-        <item name="android:gravity">center</item>
-        <item name="android:buttonBarNegativeButtonStyle">@style/AlertDialogNeutralButtonStyle</item>
-        <item name="android:buttonBarPositiveButtonStyle">@style/AlertDialogNeutralButtonStyle</item>
-        <item name="android:backgroundTint">@color/primaryColor</item>
-        <item name="android:background">@color/primaryColor</item>
-    </style>
-
-    <style name="AlertDialogNeutralButtonStyle" parent="Widget.MaterialComponents.Button.TextButton.Dialog">
-        <item name="android:textColor">@color/colorSecondaryBlue</item>
-        <item name="backgroundTint">@color/primaryColor</item>
-        <item name="background">@color/primaryColor</item>
-        <item name="android:gravity">start</item>
-        <item name="android:foregroundGravity">left</item>
-        <item name="android:layout_gravity">start</item>
     </style>
 
 </resources>

@@ -44,7 +44,10 @@ data class MusicTrack(
     var active: Int = 0,
 
     @ColumnInfo(name = "position")
-    var position: Int = -1
+    var position: Int = -1,
+
+    @ColumnInfo(name = "isButtonPlayVisible")
+    var isButtonPlayVisible: Int = 0
 ) {
 
     override fun equals(other: Any?): Boolean {
@@ -63,7 +66,7 @@ data class MusicTrack(
         return result
     }
 
-    fun myCopy(item: MusicTrack){
+    fun myCopy(item: MusicTrack) {
 
         this.relativePathShort = item.relativePathShort
         this.relativePath = item.relativePath
@@ -74,6 +77,5 @@ data class MusicTrack(
         this.musicId = item.musicId
         this.title = item.title
         this.uriAsString = item.uriAsString
-      //  this.position = item.position
     }
 }

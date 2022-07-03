@@ -2,6 +2,7 @@ package comanch.simpleplayer.dataBase
 
 import androidx.lifecycle.LiveData
 import androidx.room.*
+import comanch.simpleplayer.helpers.StringKey
 
 @Dao
 interface PlayListDAO {
@@ -21,23 +22,11 @@ interface PlayListDAO {
         insert(addItem)
     }
 
-    @Query("SELECT * from playList_data_base WHERE playListId = :key")
-    suspend fun get(key: Long): PlayList?
-
     @Query("SELECT * from playList_data_base WHERE name = :name")
     suspend fun getByName(name: String): PlayList?
 
-    @Query("DELETE FROM playList_data_base")
-    suspend fun clear()
-
-    @Query("SELECT * FROM playList_data_base ORDER BY playListId DESC LIMIT 1")
-    suspend fun getItem(): PlayList?
-
-    @Query("SELECT * FROM playList_data_base ORDER BY playListId DESC")
-    fun getAllItems(): LiveData<List<PlayList>>
-
-    @Query("SELECT * FROM playList_data_base ORDER BY playListId DESC")
-    suspend fun getListItems(): List<PlayList>?
+    @Query("SELECT * FROM playList_data_base WHERE name != :name ORDER BY playListId DESC")
+    fun getAllItems(name: String = StringKey.currentList): LiveData<List<PlayList>>
 
     @Query("SELECT COUNT(playListId) FROM playList_data_base")
     suspend fun getCount(): Int?

@@ -3,52 +3,92 @@ package comanch.simpleplayer
 import android.app.Notification
 import android.app.NotificationChannel
 import android.app.NotificationManager
-import android.os.Build
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
-import android.util.Log
-import android.view.WindowManager
 import androidx.core.app.NotificationManagerCompat
+import androidx.core.view.WindowCompat
+import androidx.core.view.WindowInsetsCompat
+import androidx.core.view.WindowInsetsControllerCompat
 import androidx.navigation.findNavController
+import androidx.preference.PreferenceManager
+import comanch.simpleplayer.helpers.NavigationCorrespondent
+import comanch.simpleplayer.helpers.StringKey
 import comanch.simpleplayer.listFragment.ListFragmentDirections
+import comanch.simpleplayer.preferences.DefaultPreference
+import comanch.simpleplayer.preferences.PreferenceKeys
 import dagger.hilt.android.AndroidEntryPoint
+import javax.inject.Inject
 
 @AndroidEntryPoint
 class MainActivity : AppCompatActivity() {
 
-    private val channelId = "myAlarm_Channel_Id"
-    private val channelName = "myAlarm_Channel_Name"
+    private val channelId = "playerKTMi channel id"
+    private val channelName = "channel playerKTMi"
     private val notificationId = 17131415
+
+    @Inject
+    lateinit var preferences: DefaultPreference
 
     override fun onCreate(savedInstanceState: Bundle?) {
 
-        setTheme(R.style.Theme_SimplePlayer)
+        val defaultPreference = PreferenceManager.getDefaultSharedPreferences(this)
+        when (defaultPreference.getString(PreferenceKeys.appStyle, "main")) {
+            "main" -> setTheme(R.style.Theme_SimplePlayer)
+            "light" -> setTheme(R.style.Theme_SimplePlayerLight)
+            else -> setTheme(R.style.Theme_SimplePlayer)
+        }
 
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
 
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-            val notificationManager = NotificationManagerCompat.from(this)
-            if (notificationManager.getNotificationChannel(channelId) == null) {
-                val channel = NotificationChannel(
-                    channelId,
-                    channelName,
-                    NotificationManager.IMPORTANCE_HIGH
-                ).apply {
-                    description = "MainActivityNotificationChannel$notificationId"
-                    lockscreenVisibility = Notification.VISIBILITY_PUBLIC
-                    setSound(null, null)
-                }
-                notificationManager.createNotificationChannel(channel)
+        val notificationManager = NotificationManagerCompat.from(this)
+        if (notificationManager.getNotificationChannel(channelId) == null) {
+            val channel = NotificationChannel(
+                channelId,
+                channelName,
+                NotificationManager.IMPORTANCE_HIGH
+            ).apply {
+                description = "MainActivityNotificationChannel$notificationId"
+                lockscreenVisibility = Notification.VISIBILITY_PUBLIC
+                setSound(null, null)
             }
+            notificationManager.createNotificationChannel(channel)
         }
+
         intent?.extras?.let {
-            if (it.containsKey("openPlayList")) {
-                intent.removeExtra("openPlayList")
+            if (it.containsKey(StringKey.openPlayList)) {
+                intent.removeExtra(StringKey.openPlayList)
                 findNavController(R.id.nav_host_fragment).navigate(
-                    ListFragmentDirections.actionListFragmentToPlayFragment()
+                    ListFragmentDirections.actionListFragmentToPlayFragment(
+                        NavigationCorrespondent.ListFragment
+                    )
                 )
             }
+        }
+    }
+
+    override fun onResume() {
+        super.onResume()
+
+        val windowInsetsController =
+            window?.let {
+                window?.decorView?.let { view ->
+                    WindowCompat.getInsetsController(
+                        it,
+                        view
+                    )
+                }
+            } ?: return
+        windowInsetsController.systemBarsBehavior =
+            WindowInsetsControllerCompat.BEHAVIOR_SHOW_TRANSIENT_BARS_BY_SWIPE
+        windowInsetsController.hide(WindowInsetsCompat.Type.navigationBars())
+    }
+
+    override fun onBackPressed() {
+        if (onBackPressedDispatcher.hasEnabledCallbacks()) {
+            super.onBackPressed()
+        } else {
+            finishAfterTransition()
         }
     }
 }

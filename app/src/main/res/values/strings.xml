@@ -2,12 +2,27 @@
     <string name="app_name">A_player_kmti</string>
 
     <string name="aboutApp">about app</string>
+    <string name="license">licenses</string>
     <string name="delete_all">delete all</string>
     <string name="delete_ok">OK</string>
     <string name="delete_cancel">Cancel</string>
 
     <string name="oss_license">open source licenses \n
     (click to view)</string>
+
+    <string name="info_about_font">
+        project font \n
+        \n
+        Copyright 2011 The Comfortaa Project Authors \n
+        (https://github.com/alexeiva/comfortaa), \n
+        with Reserved Font Name "Comfortaa". \n
+        \n
+        This Font Software is licensed under \n
+        the SIL Open Font License, Version 1.1. \n
+        This license is copied below,  \n
+        and is also available with a FAQ at: \n
+        http://scripts.sil.org/OFL \n
+    </string>
 
     <string name="sound_license_1">
   The sounds of pressing the touch keys, without changes and adaptations, are taken from here. \n
@@ -17,7 +32,7 @@
   under CC-BY 4.0 license \n
         \n
         https://creativecommons.org/licenses/by/4.0/legalcode
-</string>
+    </string>
     <string name="my_license">
   Copyright 2022 Comanch. \n
         \n
@@ -32,7 +47,7 @@
        WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. \n
        See the License for the specific language governing permissions and \n
         limitations under the License. \n
-</string>
+    </string>
     <string name="info_about_app">"simple audio player, dynamic playlist management from the screen, saving playlists and other functions. Enjoy using it!"</string>
     <string name="request_date">request date</string>
     <string name="playlist_name">playlist name</string>
@@ -40,10 +55,59 @@
     <string name="default_name">default name</string>
     <string name="enter_name">enter a name</string>
     <string name="max_list">not saved. Maximum playlists reached (20)</string>
+    <string name="image_error">the splash screen image is not available</string>
     <string name="clear_all">clear all</string>
+    <string name="empty_list">playlist is empty</string>
+
+    <string name="triangle">&#9655;</string>
 
     <string name="settings_title">settings</string>
-    <string name="back_button">back button</string>
+    <string name="back_button">button "back"</string>
+    <string name="previous_button">button "previous"</string>
+    <string name="next_button">button "next"</string>
+    <string name="play_button">button "play"</string>
+    <string name="pause_button">button "pause"</string>
+    <string name="stop_button">button "stop"</string>
+    <string name="shuffle_button">button "shuffle playlist"</string>
+    <string name="sort_button">button "sort playlist"</string>
+    <string name="repeat_list_button">button "repeat playlist"</string>
+    <string name="repeat_track_button">button "repeat track"</string>
+    <string name="repeat_off_button">button "repeat off"</string>
+    <string name="scrolling_to_top">button "scrolling to top"</string>
+    <string name="scrolling_to_bottom">button "scrolling to bottom"</string>
+    <string name="choose_playlist">choose playlist"</string>
+    <string name="save_playlist_button">button "save playlist"</string>
+    <string name="open_folder">button "open folder"</string>
+    <string name="delete_tracks_button">button "delete selected tracks"</string>
+    <string name="delete_playlist_button">button "delete selected playlist"</string>
+    <string name="select_images">select background images</string>
+    <string name="hide_the_control_panel">hide the control panel</string>
+    <string name="open_the_control_panel">open the control panel</string>
+    <string name="screensaver">this is the screensaver, click to return to the playlist</string>
+
+    <string name="forward_button">button forward</string>
     <string name="auto_scrolling">auto scrolling</string>
-    <string name="pictures">pictures</string>
+    <string name="auto_scrollinSummary">automatically scroll through the track list when switching to another tune</string>
+    <string name="pictures">backgrounds</string>
+
+    <string name="screensaverDuration">approximately before the screensaver appears</string>
+    <string name="screensaverOption">screen saver</string>
+    <string name="appStyle">app style</string>
+    <string name="setScreensaverDuration">set screensaver delay</string>
+    <string name="setAppStyle">choose the application style</string>
+    <string name="screenSaverIsOn">Show a screen saver</string>
+    <string name="screenSaverIsOnSummary">enable the display of the splash screen on the playback page</string>
+
+    <string name="preview_picture">preview</string>
+    <string name="choice_preview_picture">select a preview image</string>
+
+    <string name="play_screen_picture">play screen</string>
+    <string name="choice_play_screen_picture">select a play screen image</string>
+    <string name="picture_to_the_notification">picture for notification background</string>
+    <string name="choicePlayScreen">picture for the play screen background</string>
+
+
+    <string name="duration_to_time">%1$s:%2$s</string>
+    <string name="start_time">00:00</string>
+
 </resources>

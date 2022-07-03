@@ -3,90 +3,101 @@
     xmlns:app="http://schemas.android.com/apk/res-auto">
 
     <data>
+
         <variable
             name="detailViewModel"
             type="comanch.simpleplayer.detailFragment.DetailViewModel" />
     </data>
 
     <androidx.constraintlayout.widget.ConstraintLayout
-        style="@style/list_layout">
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="?attr/colorOnPrimary"
+        android:transitionGroup="true">
 
-        <androidx.appcompat.widget.Toolbar
-            android:id="@+id/toolbar"
-            app:layout_constraintBottom_toTopOf="@id/guideline10"
-            app:layout_constraintEnd_toStartOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent"
-            style="@style/list_toolbar">
-            <TextView
-                android:id="@+id/arrow_back"
-                android:layout_height="wrap_content"
-                android:layout_width="wrap_content"
-                android:background="@drawable/ic_baseline_detail_arrow_left_36"
-                android:layout_gravity="start"
-                />
-        </androidx.appcompat.widget.Toolbar>
+        <TextView
+            android:id="@+id/arrow_back"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="start"
+            android:background="@drawable/ic_baseline_detail_arrow_left_36"
+            android:contentDescription="@string/back_button"
+            app:layout_constraintBottom_toTopOf="@id/guideline11"
+            app:layout_constraintEnd_toStartOf="@id/guideline12"
+            app:layout_constraintStart_toStartOf="@id/guideline20"
+            app:layout_constraintTop_toBottomOf="@id/guideline22" />
 
+        <TextView
+            android:id="@+id/choice"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="start"
+            android:text="@string/select_images"
+            android:textColor="?attr/colorSecondary"
+            android:textSize="12sp"
+            app:layout_constraintBottom_toTopOf="@id/guideline11"
+            app:layout_constraintEnd_toEndOf="@id/guideline25"
+            app:layout_constraintStart_toEndOf="@id/guideline24"
+            app:layout_constraintTop_toBottomOf="@id/guideline22" />
 
         <ImageView
             android:id="@+id/imagePreview"
-            android:layout_width="120dp"
-            android:layout_height="120dp"
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            android:layout_marginStart="16dp"
+            android:layout_marginEnd="16dp"
+            android:background="@drawable/rectangle_with_stroke_choice_image"
             android:clickable="true"
             android:focusable="true"
-            android:layout_marginTop="16dp"
-            android:soundEffectsEnabled="false"
-            app:layout_constraintBottom_toTopOf="@id/choicePreview"
-            app:layout_constraintEnd_toStartOf="@id/guideline19"
-            app:layout_constraintStart_toStartOf="@id/guideline20"
-            app:layout_constraintTop_toBottomOf="@id/guideline10"
-            />
+            app:layout_constraintBottom_toTopOf="@id/guideline17"
+            app:layout_constraintEnd_toStartOf="@id/guideline13"
+            app:layout_constraintStart_toStartOf="@id/guideline24"
+            app:layout_constraintTop_toBottomOf="@id/guideline11" />
 
         <TextView
             android:id="@+id/choicePreview"
-            android:layout_width="wrap_content"
+            android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:gravity="center"
-            android:layout_marginTop="16dp"
-            android:text="choicePreview"
+            android:textSize="12sp"
+            android:text="@string/picture_to_the_notification"
             android:textColor="?attr/colorSecondary"
-            android:textSize="18sp"
-            app:layout_constraintBottom_toTopOf="@id/imagePlayScreen"
-            app:layout_constraintEnd_toStartOf="@id/guideline19"
-            app:layout_constraintStart_toStartOf="@id/guideline20"
-            app:layout_constraintTop_toBottomOf="@id/imagePreview" />
+            app:layout_constraintBottom_toTopOf="@id/guideline27"
+            app:layout_constraintEnd_toStartOf="@id/guideline13"
+            app:layout_constraintStart_toStartOf="@id/guideline24"
+            app:layout_constraintTop_toBottomOf="@id/guideline17" />
 
         <ImageView
             android:id="@+id/imagePlayScreen"
-            android:layout_width="120dp"
-            android:layout_height="120dp"
-            android:layout_marginTop="16dp"
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            android:layout_marginStart="16dp"
+            android:layout_marginEnd="16dp"
+            android:background="@drawable/rectangle_with_stroke_choice_image"
             android:clickable="true"
             android:focusable="true"
-            android:soundEffectsEnabled="false"
-            app:layout_constraintBottom_toTopOf="@id/choicePlayScreen"
-            app:layout_constraintEnd_toStartOf="@id/guideline19"
-            app:layout_constraintStart_toStartOf="@id/guideline20"
-            app:layout_constraintTop_toBottomOf="@id/choicePreview" />
+            app:layout_constraintBottom_toTopOf="@id/guideline17"
+            app:layout_constraintEnd_toStartOf="@id/guideline25"
+            app:layout_constraintStart_toStartOf="@id/guideline13"
+            app:layout_constraintTop_toBottomOf="@id/guideline11" />
 
         <TextView
             android:id="@+id/choicePlayScreen"
-            android:layout_width="wrap_content"
+            android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:gravity="center"
-            android:layout_marginTop="16dp"
-            android:text="choicePlayScreen"
+            android:text="@string/choicePlayScreen"
             android:textColor="?attr/colorSecondary"
-            android:textSize="18sp"
-            app:layout_constraintBottom_toTopOf="@id/guideline17"
-            app:layout_constraintEnd_toStartOf="@id/guideline19"
-            app:layout_constraintStart_toStartOf="@id/guideline20"
-            app:layout_constraintTop_toBottomOf="@id/imagePlayScreen" />
+            android:textSize="12sp"
+            app:layout_constraintBottom_toTopOf="@id/guideline27"
+            app:layout_constraintEnd_toStartOf="@id/guideline25"
+            app:layout_constraintStart_toStartOf="@id/guideline13"
+            app:layout_constraintTop_toBottomOf="@id/guideline17" />
 
         <androidx.constraintlayout.widget.Guideline
             android:id="@+id/guideline17"
             style="@style/list_guideline_hor"
-            app:layout_constraintGuide_end="24dp" />
+            app:layout_constraintGuide_end="36dp" />
 
         <androidx.constraintlayout.widget.Guideline
             android:id="@+id/guideline19"
@@ -99,11 +110,51 @@
             app:layout_constraintGuide_begin="8dp" />
 
         <androidx.constraintlayout.widget.Guideline
-            android:id="@+id/guideline10"
+            android:id="@+id/guideline11"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:orientation="horizontal"
-            app:layout_constraintGuide_begin="64dp" />
+            app:layout_constraintGuide_begin="80dp" />
+
+        <androidx.constraintlayout.widget.Guideline
+            android:id="@+id/guideline12"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            app:layout_constraintGuide_begin="48dp" />
+
+        <androidx.constraintlayout.widget.Guideline
+            android:id="@+id/guideline13"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            app:layout_constraintGuide_begin="366dp" />
+
+        <androidx.constraintlayout.widget.Guideline
+            android:id="@+id/guideline22"
+            style="@style/list_guideline_hor"
+            app:layout_constraintGuide_begin="32dp" />
+
+        <androidx.constraintlayout.widget.Guideline
+            android:id="@+id/guideline24"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            app:layout_constraintGuide_begin="60dp" />
+
+        <androidx.constraintlayout.widget.Guideline
+            android:id="@+id/guideline25"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            app:layout_constraintGuide_end="60dp" />
+
+        <androidx.constraintlayout.widget.Guideline
+            android:id="@+id/guideline27"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            app:layout_constraintGuide_end="8dp" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 

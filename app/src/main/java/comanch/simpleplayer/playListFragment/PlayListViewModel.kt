@@ -1,12 +1,13 @@
 package comanch.simpleplayer.playListFragment
 
-import androidx.lifecycle.*
-import comanch.simpleplayer.LiveDataEvent
+import androidx.lifecycle.ViewModel
+import androidx.lifecycle.MutableLiveData
+import androidx.lifecycle.LiveData
+import comanch.simpleplayer.helpers.LiveDataEvent
 import comanch.simpleplayer.dataBase.PlayList
 import comanch.simpleplayer.dataBase.PlayListDAO
 import dagger.hilt.android.lifecycle.HiltViewModel
 import javax.inject.Inject
-
 
 @HiltViewModel
 class PlayListViewModel @Inject constructor(databasePlayList: PlayListDAO

@@ -1,8 +1,8 @@
 package comanch.simpleplayer.playFragment
 
 import android.annotation.SuppressLint
-import android.util.Log
 import android.view.LayoutInflater
+import android.view.View
 import android.view.ViewGroup
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
@@ -16,25 +16,36 @@ class PlayItemListener(val clickListener: (item: MusicTrack) -> Unit) {
     fun onClick(item: MusicTrack) = clickListener(item)
 }
 
-class PlayItemLongListener(val longClickListener: (item: MusicTrack) -> Boolean) {
-    fun onLongClick(item: MusicTrack) = longClickListener(item)
+class ButtonPlayListener(val playClickListener: (item: MusicTrack) -> Unit) {
+    fun onPlayClick(item: MusicTrack) = playClickListener(item)
 }
 
 class PlayItemAdapter(
     private val clickListener: PlayItemListener,
-    private val longClickListener: PlayItemLongListener
+    private val longClickListenerButton: ButtonPlayListener,
+    private val backgroundPlayColor: Int
 ) : ListAdapter<DataItem, RecyclerView.ViewHolder>(
     SleepNightDiffCallback()
 ) {
 
     private var mRecyclerView: RecyclerView? = null
 
-    var isDelete: Boolean = false
-
     fun setData(list: List<MusicTrack>?) {
 
         val items = list?.map { DataItem.MusicItem(it) }
         submitList(items)
+    }
+
+    fun mGetItemId(position: Int?): Long? {
+
+        if (position == null){
+            return null
+        }
+        return if (position >= 0 && position <= currentList.size.minus(1)) {
+            super.getItem(position).musicTrackId
+        }else{
+            null
+        }
     }
 
     override fun onCurrentListChanged(
@@ -55,16 +66,18 @@ class PlayItemAdapter(
         return ViewHolder.from(parent)
     }
 
-    override fun onViewRecycled(holder: RecyclerView.ViewHolder) {
-        super.onViewRecycled(holder)
-    }
-
     override fun onBindViewHolder(holder: RecyclerView.ViewHolder, position: Int) {
 
         when (holder) {
             is ViewHolder -> {
                 val item = getItem(position) as DataItem.MusicItem
-                holder.bind(item.musicTrack, clickListener, longClickListener, position)
+                holder.bind(
+                    item.musicTrack,
+                    clickListener,
+                    longClickListenerButton,
+                    position,
+                    backgroundPlayColor
+                )
             }
         }
     }
@@ -85,8 +98,9 @@ class PlayItemAdapter(
         fun bind(
             item: MusicTrack,
             clickListener: PlayItemListener,
-            longClickListener: PlayItemLongListener,
-            position: Int
+            longClickListenerButton: ButtonPlayListener,
+            position: Int,
+            backgroundPlayColor: Int
         ) {
             item.position = position
             binding.item = item
@@ -94,12 +108,17 @@ class PlayItemAdapter(
             binding.title.text = item.title
             binding.duration.text = item.duration
             binding.clickListener = clickListener
-            binding.longClickListener = longClickListener
+            binding.longClickListener = longClickListenerButton
 
             if (item.active == 1) {
                 binding.itemLayout.setBackgroundResource(R.drawable.rectangle_with_stroke)
             } else {
-                binding.itemLayout.setBackgroundResource(R.drawable.rectangle_for_folder_name)
+                binding.itemLayout.setBackgroundResource(R.drawable.rectangle_without_stroke)
+            }
+            if(item.isButtonPlayVisible == 1){
+                binding.play.visibility = View.VISIBLE
+            }else{
+                binding.play.visibility = View.GONE
             }
         }
     }
@@ -112,21 +131,23 @@ class PlayItemAdapter(
 class SleepNightDiffCallback : DiffUtil.ItemCallback<DataItem>() {
 
     override fun areItemsTheSame(oldItem: DataItem, newItem: DataItem): Boolean {
-        return oldItem.musicTrackId == newItem.musicTrackId
+        return oldItem.musicTrackId == newItem.musicTrackId || oldItem.musicId == newItem.musicId
     }
 
     @SuppressLint("DiffUtilEquals")
     override fun areContentsTheSame(oldItem: DataItem, newItem: DataItem): Boolean {
-        return oldItem == newItem
+        return oldItem.musicId == newItem.musicId
     }
 }
 
 sealed class DataItem {
 
     abstract val musicTrackId: Long
+    abstract val musicId: String
 
     data class MusicItem(val musicTrack: MusicTrack) : DataItem() {
         override val musicTrackId = musicTrack.musicTrackId
+        override val musicId = musicTrack.musicId
     }
 }
 

@@ -10,32 +10,36 @@ import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
 import androidx.fragment.app.viewModels
+import androidx.lifecycle.LifecycleOwner
 import androidx.navigation.fragment.navArgs
-import comanch.simpleplayer.*
+import comanch.simpleplayer.interfaces.WorkMusicListFragment
+import comanch.simpleplayer.StateViewModel
+import comanch.simpleplayer.helpers.NavigationBetweenFragments
 import comanch.simpleplayer.dataBase.MusicTrack
+import comanch.simpleplayer.R
+import comanch.simpleplayer.musicManagment.MusicList
 import comanch.simpleplayer.databinding.DetailFragmentBinding
 import dagger.hilt.android.AndroidEntryPoint
 import javax.inject.Inject
 
 @AndroidEntryPoint
-class DetailFragment : Fragment() {
+class DetailFragment() : Fragment(), WorkMusicListFragment {
 
-    private val detailViewModel: DetailViewModel by viewModels()
-    private val stateViewModel: StateViewModel by activityViewModels()
-
-    @Inject
-    lateinit var soundPoolContainer: SoundPoolForFragments
+    override val viewModel: DetailViewModel by viewModels()
+    override val stateViewModel: StateViewModel by activityViewModels()
+    override val lifecycleOwner: LifecycleOwner by lazy { viewLifecycleOwner }
+    override var list: List<MusicTrack>? = null
+    override var notifyAdapterPosition: (Int) -> Unit = ::notifyItem
 
     @Inject
     lateinit var navigation: NavigationBetweenFragments
 
-    private var adapter: DetailItemAdapter? = null
-    private var list: List<MusicTrack>? = null
     private val args: DetailFragmentArgs by navArgs()
+    private var adapter: DetailItemAdapter? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
-
         super.onCreate(savedInstanceState)
+
         val action = DetailFragmentDirections.actionDetailFragmentToListFragment()
         val callback = requireActivity().onBackPressedDispatcher.addCallback(this) {
             navigation.navigateToDestination(
@@ -44,10 +48,6 @@ class DetailFragment : Fragment() {
             )
         }
         callback.isEnabled = true
-
-        soundPoolContainer.soundPool.setOnLoadCompleteListener { _, sampleId, status ->
-            soundPoolContainer.soundMap[sampleId] = status
-        }
     }
 
     override fun onCreateView(
@@ -64,15 +64,19 @@ class DetailFragment : Fragment() {
 
         adapter = DetailItemAdapter(
             DetailItemListener { itemId ->
-                detailViewModel.onItemClicked(itemId)
+                viewModel.onItemClicked(itemId)
             })
 
         binding.list.adapter = adapter
         binding.lifecycleOwner = viewLifecycleOwner
 
         adapter?.setData(getMusicList())
+        binding.list.itemAnimator = null
 
-        detailViewModel.toast.observe(viewLifecycleOwner) { content ->
+
+        setMusicListControl()
+
+        viewModel.toast.observe(viewLifecycleOwner) { content ->
             content.getContentIfNotHandled()?.let {
                 Toast.makeText(
                     context,
@@ -82,60 +86,26 @@ class DetailFragment : Fragment() {
             }
         }
 
-        detailViewModel.click.observe(viewLifecycleOwner) { content ->
-            content.getContentIfNotHandled()?.let {
-                it.active = if (it.active == 1) {
-                    stateViewModel.removeMusicTrackFromList(it)
-                    0
-                } else {
-                    stateViewModel.addMusicTrack(it)
-                    1
-                }
-                adapter?.notifyItemChanged(it.position)
-            }
-        }
-
-        stateViewModel.containedInMusicList.observe(viewLifecycleOwner) { content ->
-            content.getContentIfNotHandled()?.let {list ->
-                list.forEach {
-                    it.active = 1
-                    adapter?.notifyItemChanged(it.position)
-                }
-            }
-        }
-
-        stateViewModel.musicListIsEmpty.observe(viewLifecycleOwner) { content ->
-            content.getContentIfNotHandled()?.let {isEmpty ->
-                if (!isEmpty) {
-                    list?.let { it -> stateViewModel.containedInMusicList(it) }
-                }
-            }
-        }
-
-        detailViewModel.setMusicActive.observe(viewLifecycleOwner) { content ->
-            content.getContentIfNotHandled()?.let {
-                stateViewModel.musicListIsEmpty()
-            }
-        }
-
         binding.arrowBack.setOnClickListener {
             navigation.navigateToDestination(
                 this@DetailFragment,
                 DetailFragmentDirections.actionDetailFragmentToListFragment()
             )
         }
+
         return binding.root
     }
 
-    override fun onResume() {
+    override fun notifyItem(pos: Int){
+        adapter?.notifyItemChanged(pos)
+    }
 
+    override fun onResume() {
         super.onResume()
-        detailViewModel.setMusicActive()
-        soundPoolContainer.setTouchSound()
+        viewModel.setMusicActive()
     }
 
     private fun getMusicList(): List<MusicTrack>? {
-
         list = context?.let { MusicList(it, args.relativePath).getMusicList() }
         return list
     }

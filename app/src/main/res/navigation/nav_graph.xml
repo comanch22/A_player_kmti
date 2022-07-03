@@ -33,7 +33,14 @@
             app:destination="@id/settingsFragment" />
         <action
             android:id="@+id/action_listFragment_to_imageFragment"
-            app:destination="@id/imageFragment" />
+            app:destination="@id/imageFragment"
+            app:popUpTo="@id/nav_graph"
+            app:popUpToInclusive="true" />
+        <action
+            android:id="@+id/action_listFragment_to_licenseFragment"
+            app:destination="@id/licenseFragment"
+            app:popUpTo="@id/nav_graph"
+            app:popUpToInclusive="true" />
     </fragment>
     <fragment
         android:id="@+id/detailFragment"
@@ -67,6 +74,14 @@
             app:destination="@id/listFragment"
             app:popUpTo="@id/nav_graph"
             app:popUpToInclusive="true" />
+        <action
+            android:id="@+id/action_playFragment_to_imageForPlayFragment"
+            app:destination="@id/imageForPlayFragment"
+            app:popUpTo="@id/nav_graph"
+            app:popUpToInclusive="true" />
+        <argument
+            android:name="correspondent"
+            app:argType="comanch.simpleplayer.helpers.NavigationCorrespondent" />
     </fragment>
     <fragment
         android:id="@+id/playListFragment"
@@ -85,7 +100,7 @@
     </fragment>
     <fragment
         android:id="@+id/settingsFragment"
-        android:name="comanch.simpleplayer.settingsFragment.SettingsFragment"
+        android:name="comanch.simpleplayer.preferences.SettingsFragment"
         android:label="SettingsFragment" >
         <action
             android:id="@+id/action_settingsFragment_to_listFragment"
@@ -97,6 +112,41 @@
         android:label="ImageFragment" >
         <action
             android:id="@+id/action_imageFragment_to_listFragment"
-            app:destination="@id/listFragment" />
+            app:destination="@id/listFragment"
+            app:popUpTo="@id/nav_graph"
+            app:popUpToInclusive="true" />
+        <action
+            android:id="@+id/action_imageFragment_to_imageForPlayFragment"
+            app:destination="@id/imageForPlayFragment"
+            app:popUpTo="@id/nav_graph"
+            app:popUpToInclusive="true" />
+    </fragment>
+    <fragment
+        android:id="@+id/imageForPlayFragment"
+        android:name="comanch.simpleplayer.imageForPlayFragment.ImageForPlayFragment"
+        android:label="ImageForPlayFragment" >
+        <action
+            android:id="@+id/action_imageForPlayFragment_to_playFragment"
+            app:destination="@id/playFragment"
+            app:popUpTo="@id/nav_graph"
+            app:popUpToInclusive="true" />
+        <action
+            android:id="@+id/action_imageForPlayFragment_to_imageFragment"
+            app:destination="@id/imageFragment"
+            app:popUpTo="@id/nav_graph"
+            app:popUpToInclusive="true" />
+        <argument
+            android:name="correspondent"
+            app:argType="comanch.simpleplayer.helpers.NavigationCorrespondent" />
+    </fragment>
+    <fragment
+        android:id="@+id/licenseFragment"
+        android:name="comanch.simpleplayer.licenseFragment.LicenseFragment"
+        android:label="LicenseFragment" >
+        <action
+            android:id="@+id/action_licenseFragment_to_listFragment"
+            app:destination="@id/listFragment"
+            app:popUpTo="@id/nav_graph"
+            app:popUpToInclusive="true" />
     </fragment>
 </navigation>

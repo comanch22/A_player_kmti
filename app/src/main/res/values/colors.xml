@@ -8,12 +8,31 @@
     <color name="black">#FF000000</color>
     <color name="white">#FFFFFFFF</color>
 
-    <color name="launchTextColor">#7FB5DF</color>
 
-    <color name="primaryColor">#596C7A</color>
-    <color name="colorPrimaryLight">#A8B5BF</color>
-    <color name="colorSecondaryBlue">#FF000000</color>
-    <color name="colorSeekLight">#BBC8D3</color>
-    <color name="colorSeekDark">#99A4AD</color>
+
+    <!-- main color. -->
+    <color name="controlMain">#43a047</color>
+    <color name="backgroundMain">#455a64</color>
+    <color name="backgroundMain2">#263238</color>
+    <color name="colorTextMain">#29B5F1</color>
+    <color name="colorTextSecondaryMain">#7FD3F7</color>
+    <color name="colorTextHintMain">#B2E5FA</color>
+    <color name="colorControlActiveMain">#43a047</color>
+    <color name="colorControlInactiveMain">#a5d6a7</color>
+    <color name="colorRippleMain">#37474f</color>
+
+    <!-- light color. -->
+    <color name="controlLight">#707070</color>
+    <color name="backgroundLight">#eeeeee</color>
+    <color name="backgroundLight2">#bdbdbd</color>
+    <color name="colorTextLight">#000000</color>
+    <color name="colorTextSecondaryLight">#484848</color>
+    <color name="colorTextHintLight">#aeaeae</color>
+    <color name="colorControlActiveLight">#707070</color>
+    <color name="colorControlInactiveLight">#a4a4a4</color>
+    <color name="colorRippleLight">#9e9e9e</color>
+
+    <!-- license theme. -->
+    <color name="textColorLight">#97B1C5</color>
 
 </resources>

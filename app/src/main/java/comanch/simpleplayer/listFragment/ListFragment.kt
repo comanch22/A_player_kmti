@@ -1,8 +1,8 @@
 package comanch.simpleplayer.listFragment
 
-import android.os.Bundle
 import android.Manifest
 import android.content.pm.PackageManager
+import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.MenuItem
 import android.view.View
@@ -16,31 +16,41 @@ import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
 import androidx.fragment.app.viewModels
-import comanch.simpleplayer.*
+import androidx.lifecycle.LifecycleOwner
+import comanch.simpleplayer.R
+import comanch.simpleplayer.StateViewModel
 import comanch.simpleplayer.dataBase.MusicTrack
 import comanch.simpleplayer.databinding.ListFragmentBinding
+import comanch.simpleplayer.helpers.NavigationBetweenFragments
+import comanch.simpleplayer.helpers.NavigationCorrespondent
+import comanch.simpleplayer.interfaces.WorkMusicListFragment
+import comanch.simpleplayer.musicManagment.FoldersList
+import comanch.simpleplayer.musicManagment.MusicList
 import dagger.hilt.android.AndroidEntryPoint
 import javax.inject.Inject
 
-@AndroidEntryPoint
-class ListFragment : Fragment() {
 
-    private val listViewModel: ListViewModel by viewModels()
-    private val stateViewModel: StateViewModel by activityViewModels()
+@AndroidEntryPoint
+class ListFragment : Fragment(), WorkMusicListFragment {
+
+    override val viewModel: ListViewModel by viewModels()
+    override val stateViewModel: StateViewModel by activityViewModels()
+    override val lifecycleOwner: LifecycleOwner by lazy { viewLifecycleOwner }
+    override var list: List<MusicTrack>? = null
+    override var notifyAdapterPosition: (Int) -> Unit = ::notifyItem
+
+    var adapter: ListItemAdapter? = null
 
     private lateinit var requestPermissionLauncher: ActivityResultLauncher<String>
 
     @Inject
-    lateinit var soundPoolContainer: SoundPoolForFragments
-
-    @Inject
     lateinit var navigation: NavigationBetweenFragments
-
-    private var adapter: ListItemAdapter? = null
-    private var list: List<MusicTrack>? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+
+        activity?.window?.statusBarColor =
+            resources.getColor(R.color.background, activity?.theme)
 
         requestPermissionLauncher =
             registerForActivityResult(
@@ -57,10 +67,6 @@ class ListFragment : Fragment() {
             activity?.finish()
         }
         callback.isEnabled = true
-
-        soundPoolContainer.soundPool.setOnLoadCompleteListener { _, sampleId, status ->
-            soundPoolContainer.soundMap[sampleId] = status
-        }
     }
 
     override fun onCreateView(
@@ -73,30 +79,32 @@ class ListFragment : Fragment() {
         )
 
         binding.list.setHasFixedSize(true)
-        binding.listViewModel = listViewModel
+        binding.listViewModel = viewModel
 
-        listViewModel.startLoadFolders()
+        viewModel.startLoadFolders()
 
         adapter = ListItemAdapter(
             OpenFolderListener { item ->
-                listViewModel.openFolder(item)
+                viewModel.openFolder(item)
             },
             ChooseFolderListener { item ->
-                listViewModel.click(item)
+                viewModel.onItemClicked(item)
             }
         )
 
         binding.list.adapter = adapter
+        binding.list.itemAnimator = null
         binding.lifecycleOwner = viewLifecycleOwner
+
+        setMusicListControl()
 
         binding.toolbar.inflateMenu(R.menu.app_menu)
         binding.toolbar.setOnMenuItemClickListener {
             menuNavigation(it)
         }
 
-        listViewModel.navigateToDetailFragment.observe(viewLifecycleOwner) { it ->
+        viewModel.navigateToDetailFragment.observe(viewLifecycleOwner) { it ->
             it.getContentIfNotHandled()?.let {
-                soundPoolContainer.playSoundIfEnable(soundPoolContainer.soundButtonTap)
                 navigation.navigateToDestination(
                     this,
                     ListFragmentDirections.actionListFragmentToDetailFragment(it.relativePath)
@@ -104,7 +112,7 @@ class ListFragment : Fragment() {
             }
         }
 
-        listViewModel.loadFolders.observe(viewLifecycleOwner) { it ->
+        viewModel.loadFolders.observe(viewLifecycleOwner) { it ->
             it.getContentIfNotHandled()?.let {
                 when {
                     context?.let { it_ ->
@@ -126,49 +134,22 @@ class ListFragment : Fragment() {
             }
         }
 
-        listViewModel.click.observe(viewLifecycleOwner) { content ->
-
-            content.getContentIfNotHandled()?.let {
-
-                it.active = if (it.active == 1) {
-                    stateViewModel.removeMusicTrackFromList(it)
-                    0
-                } else {
-                    stateViewModel.addMusicTrack(it)
-                    1
-                }
-                adapter?.notifyItemChanged(it.position)
-            }
-        }
-
-        stateViewModel.containedInMusicList.observe(viewLifecycleOwner) { content ->
-            content.getContentIfNotHandled()?.let {list ->
-                list.forEach {
-                    it.active = 1
-                    adapter?.notifyItemChanged(it.position)
-                }
-            }
-        }
-
-        stateViewModel.musicListIsEmpty.observe(viewLifecycleOwner) { content ->
-            content.getContentIfNotHandled()?.let {isEmpty ->
-                if (!isEmpty) {
-                    list?.let { it -> stateViewModel.containedInMusicList(it) }
-                }
-            }
-        }
-
-        listViewModel.setFolderActive.observe(viewLifecycleOwner) { content ->
-            content.getContentIfNotHandled()?.let {
-               stateViewModel.musicListIsEmpty()
-            }
-        }
-
         stateViewModel.navigationToPlay.observe(viewLifecycleOwner) { content ->
             content.getContentIfNotHandled()?.let {
+                if (it < 0) {
+                    Toast.makeText(
+                        context,
+                        resources.getString(R.string.empty_list),
+                        Toast.LENGTH_LONG
+                    ).show()
+                    return@observe
+                }
                 navigation.navigateToDestination(
                     this,
-                    ListFragmentDirections.actionListFragmentToPlayFragment())
+                    ListFragmentDirections.actionListFragmentToPlayFragment(
+                        NavigationCorrespondent.ListFragment
+                    )
+                )
             }
         }
 
@@ -177,25 +158,26 @@ class ListFragment : Fragment() {
 
                 val resultList = mutableListOf<MusicTrack>()
                 contentList.forEach {
-                    if (it.isFolder){
-                        resultList.addAll(MusicList(requireContext(), it.relativePath).getMusicList())
-                    }else{
+                    if (it.isFolder) {
+                        resultList.addAll(
+                            MusicList(
+                                requireContext(),
+                                it.relativePath
+                            ).getMusicList()
+                        )
+                    } else {
                         resultList.add(it)
                     }
                 }
-                    stateViewModel.setCurrentPlaylist(resultList)
+                stateViewModel.setCurrentPlaylist(resultList)
             }
         }
 
         binding.arrowBack.setOnClickListener {
-
-            soundPoolContainer.playSoundIfEnable(soundPoolContainer.soundButtonTap)
             activity?.finish()
         }
 
         binding.playList.setOnClickListener {
-
-            soundPoolContainer.playSoundIfEnable(soundPoolContainer.soundButtonTap)
             navigation.navigateToDestination(
                 this,
                 ListFragmentDirections.actionListFragmentToPlayListFragment()
@@ -203,29 +185,35 @@ class ListFragment : Fragment() {
         }
 
         binding.play.setOnClickListener {
-
-            soundPoolContainer.playSoundIfEnable(soundPoolContainer.soundButtonTap)
             stateViewModel.getMusicList()
         }
 
         return binding.root
     }
 
+    override fun notifyItem(pos: Int) {
+        adapter?.notifyItemChanged(pos)
+    }
+
     override fun onResume() {
         super.onResume()
-        listViewModel.setFolderActive()
-        soundPoolContainer.setTouchSound()
+        viewModel.setMusicActive()
     }
 
     private fun loadFolders() {
-
         list = context?.let { FoldersList(it).getFolders() }
         adapter?.setData(list)
     }
 
     private fun menuNavigation(it: MenuItem) = when (it.itemId) {
+        R.id.license -> {
+            navigation.navigateToDestination(
+                this,
+                ListFragmentDirections.actionListFragmentToLicenseFragment()
+            )
+            true
+        }
         R.id.about_app -> {
-            soundPoolContainer.playSoundIfEnable(soundPoolContainer.soundButtonTap)
             navigation.navigateToDestination(
                 this,
                 ListFragmentDirections.actionListFragmentToAboutAppFragment()
@@ -233,7 +221,6 @@ class ListFragment : Fragment() {
             true
         }
         R.id.action_settings -> {
-            soundPoolContainer.playSoundIfEnable(soundPoolContainer.soundButtonTap)
             navigation.navigateToDestination(
                 this,
                 ListFragmentDirections.actionListFragmentToSettingsFragment()
@@ -241,7 +228,6 @@ class ListFragment : Fragment() {
             true
         }
         R.id.action_images -> {
-            soundPoolContainer.playSoundIfEnable(soundPoolContainer.soundButtonTap)
             navigation.navigateToDestination(
                 this,
                 ListFragmentDirections.actionListFragmentToImageFragment()

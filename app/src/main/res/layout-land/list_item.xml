@@ -20,16 +20,18 @@
     <androidx.constraintlayout.widget.ConstraintLayout
         android:id="@+id/itemLayout"
         android:layout_width="match_parent"
-        android:layout_height="56dp"
+        android:layout_height="64dp"
         android:layout_marginTop="4dp"
-        android:background="@drawable/rectangle_for_list"
-        android:soundEffectsEnabled="false">
+        android:transitionGroup="true"
+        android:background="@drawable/rectangle_for_list">
 
         <TextView
             android:id="@+id/folderIcon"
             android:layout_height="wrap_content"
             android:layout_width="wrap_content"
             android:background="@drawable/ic_baseline_folder_48"
+            android:stateListAnimator="@animator/click_scale_anim"
+            android:contentDescription="@string/open_folder"
             android:gravity="center"
             android:onClick="@{() -> clickListener.onClick(item)}"
             app:layout_constraintBottom_toBottomOf="parent"
@@ -42,7 +44,7 @@
             style="@style/list_size14"
             android:gravity="center"
             android:onClick="@{() -> chooseFolderListener.onClick(item)}"
-            android:background="@drawable/rectangle_for_folder_name"
+            android:background="@drawable/rectangle_without_stroke"
             android:stateListAnimator="@animator/click_scale_anim"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
@@ -54,7 +56,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:orientation="vertical"
-            app:layout_constraintGuide_begin="120dp" />
+            app:layout_constraintGuide_begin="124dp" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 </layout>

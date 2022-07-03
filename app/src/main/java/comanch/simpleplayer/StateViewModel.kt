@@ -8,6 +8,8 @@ import comanch.simpleplayer.dataBase.MusicTrack
 import comanch.simpleplayer.dataBase.MusicTrackDAO
 import comanch.simpleplayer.dataBase.PlayList
 import comanch.simpleplayer.dataBase.PlayListDAO
+import comanch.simpleplayer.helpers.LiveDataEvent
+import comanch.simpleplayer.helpers.StringKey
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
@@ -21,14 +23,24 @@ class StateViewModel @Inject constructor(
 
     private val musicActiveList = mutableListOf<MusicTrack>()
     private var sortFlag = 0
+    private var setIsRepeat = 0
+    private var setStartPlay: Int? = null
 
     private val _deleteArray = MutableLiveData<LiveDataEvent<Array<String>?>>()
     val deleteArray: LiveData<LiveDataEvent<Array<String>?>>
         get() = _deleteArray
 
+    private val _currentTitle = MutableLiveData<LiveDataEvent<String?>>()
+    val currentTitle: LiveData<LiveDataEvent<String?>>
+        get() = _currentTitle
+
     private val _startPlay = MutableLiveData<LiveDataEvent<Int?>>()
     val startPlay: LiveData<LiveDataEvent<Int?>>
         get() = _startPlay
+
+    private val _isRepeat = MutableLiveData<LiveDataEvent<Int?>>()
+    val isRepeat: LiveData<LiveDataEvent<Int?>>
+        get() = _isRepeat
 
     private val _navigationToPlay = MutableLiveData<LiveDataEvent<Int?>>()
     val navigationToPlay: LiveData<LiveDataEvent<Int?>>
@@ -45,6 +57,10 @@ class StateViewModel @Inject constructor(
     private val _isPlaying = MutableLiveData<LiveDataEvent<Boolean?>>()
     val isPlaying: LiveData<LiveDataEvent<Boolean?>>
         get() = _isPlaying
+
+    private val _isPause = MutableLiveData<LiveDataEvent<Boolean?>>()
+    val isPause: LiveData<LiveDataEvent<Boolean?>>
+        get() = _isPause
 
     private val _containedInMusicList = MutableLiveData<LiveDataEvent<List<MusicTrack>?>>()
     val containedInMusicList: LiveData<LiveDataEvent<List<MusicTrack>?>>
@@ -87,6 +103,10 @@ class StateViewModel @Inject constructor(
         _isPlaying.value = LiveDataEvent(b)
     }
 
+    fun setIsPause(b: Boolean) {
+        _isPause.value = LiveDataEvent(b)
+    }
+
     fun sortCurrentList() {
 
         if (sortFlag == 4) {
@@ -113,6 +133,7 @@ class StateViewModel @Inject constructor(
                     val item = MusicTrack()
                     item.myCopy(it)
                     item.active = it.active
+                    item.isButtonPlayVisible = it.isButtonPlayVisible
                     item.playListName = StringKey.currentList
                     insertList.add(item)
                 }
@@ -132,6 +153,7 @@ class StateViewModel @Inject constructor(
                     val item = MusicTrack()
                     item.myCopy(it)
                     item.active = it.active
+                    item.isButtonPlayVisible = it.isButtonPlayVisible
                     item.playListName = StringKey.currentList
                     insertList.add(item)
                 }
@@ -154,19 +176,31 @@ class StateViewModel @Inject constructor(
                 item.playListName = StringKey.currentList
                 insertList.add(item)
             }
+
             if (insertList.isNotEmpty()) {
                 databaseMusic.deletePlaylist(StringKey.currentList)
-                _navigationToPlay.value = LiveDataEvent(1)
                 databaseMusic.insertPlayList(insertList.toList())
+            }
+
+            delay(100)
+            if (databaseMusic.getCount() == 0) {
+                _navigationToPlay.value = LiveDataEvent(-1)
+                return@launch
             } else {
                 _navigationToPlay.value = LiveDataEvent(1)
             }
-            delay(200)
-            if (insertList.isNotEmpty()) {
-                _startPlay.value = LiveDataEvent(2)
+
+            setStartPlay = if (insertList.isNotEmpty()) {
+                2
             } else {
-                _startPlay.value = LiveDataEvent(1)
+                1
             }
+        }
+    }
+
+    fun triggerStartPlay() {
+        setStartPlay?.let {
+            _startPlay.value = LiveDataEvent(it)
         }
     }
 
@@ -192,6 +226,26 @@ class StateViewModel @Inject constructor(
                 insertList.add(item)
             }
             databaseMusic.listDelByNameInsByList(name, insertList.toList())
+        }
+    }
+
+    fun moveItems(firstId: Long?, secondId: Long?) {
+
+        if (firstId == null || secondId == null) {
+            return
+        }
+        viewModelScope.launch {
+            databaseMusic.swapItems(firstId, secondId)
+        }
+    }
+
+    fun deleteItem(id: Long) {
+
+        viewModelScope.launch {
+            databaseMusic.getItemById(id)?.let {
+                databaseMusic.delete(it)
+                _deleteArray.value = LiveDataEvent(arrayOf(it.musicId))
+            }
         }
     }
 
@@ -255,6 +309,25 @@ class StateViewModel @Inject constructor(
 
     private fun clearMusicActiveList() {
         musicActiveList.clear()
+    }
+
+    fun setIsRepeat() {
+
+        setIsRepeat = when (setIsRepeat) {
+            0 -> 1
+            1 -> 2
+            2 -> 0
+            else -> 0
+        }
+        _isRepeat.value = LiveDataEvent(setIsRepeat)
+    }
+
+    fun restartIsRepeat() {
+        _isRepeat.value = LiveDataEvent(setIsRepeat)
+    }
+
+    fun setCurrentTitle(title: String) {
+        _currentTitle.value = LiveDataEvent(title)
     }
 }
 

@@ -72,7 +72,7 @@ class DetailItemAdapter(private val clickListener: DetailItemListener) : ListAda
             if (item.active == 1){
                 binding.itemLayout.setBackgroundResource(R.drawable.rectangle_with_stroke)
             }else{
-                binding.itemLayout.setBackgroundResource(R.drawable.rectangle_for_folder_name)
+                binding.itemLayout.setBackgroundResource(R.drawable.rectangle_without_stroke)
             }
         }
     }
@@ -90,7 +90,7 @@ class SleepNightDiffCallback : DiffUtil.ItemCallback<DataItem>() {
 
     @SuppressLint("DiffUtilEquals")
     override fun areContentsTheSame(oldItem: DataItem, newItem: DataItem): Boolean {
-        return oldItem == newItem
+        return oldItem.musicTrackId == newItem.musicTrackId
     }
 }
 

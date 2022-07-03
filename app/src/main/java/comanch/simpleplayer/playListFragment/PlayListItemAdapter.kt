@@ -10,7 +10,6 @@ import comanch.simpleplayer.R
 import comanch.simpleplayer.dataBase.PlayList
 import comanch.simpleplayer.databinding.PlayListItemBinding
 
-
 class PlayListItemListener(val clickListener: (item: PlayList) -> Unit) {
      fun onClick(item: PlayList) = clickListener(item)
 }
@@ -70,7 +69,7 @@ class PlayListItemAdapter(private val clickListener: PlayListItemListener) : Lis
             if (item.active == 1){
                 binding.itemLayout.setBackgroundResource(R.drawable.rectangle_with_stroke)
             }else{
-                binding.itemLayout.setBackgroundResource(R.drawable.rectangle_for_folder_name)
+                binding.itemLayout.setBackgroundResource(R.drawable.rectangle_without_stroke)
             }
         }
     }

@@ -9,48 +9,33 @@
     </data>
 
     <androidx.constraintlayout.widget.ConstraintLayout
-        style="@style/list_layout">
+        style="@style/list_layout"
+        android:transitionGroup="true">
 
-        <androidx.appcompat.widget.Toolbar
-            android:id="@+id/toolbar"
-            app:layout_constraintBottom_toTopOf="@id/list"
-            app:layout_constraintEnd_toStartOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent"
-            style="@style/list_toolbar">
-            <TextView
-                android:id="@+id/arrow_back"
-                android:layout_height="wrap_content"
-                android:layout_width="wrap_content"
-                android:background="@drawable/ic_baseline_detail_arrow_left_36"
-                android:layout_gravity="start"
-                />
-        </androidx.appcompat.widget.Toolbar>
+        <TextView
+            android:id="@+id/arrow_back"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="start"
+            android:contentDescription="@string/back_button"
+            android:background="@drawable/ic_baseline_detail_arrow_left_36"
+            app:layout_constraintBottom_toTopOf="@id/guideline11"
+            app:layout_constraintEnd_toStartOf="@id/guideline12"
+            app:layout_constraintStart_toStartOf="@id/guideline20"
+            app:layout_constraintTop_toBottomOf="@id/guideline22" />
+
         <androidx.recyclerview.widget.RecyclerView
-
             android:id="@+id/list"
             style="@style/list_recycle"
+            android:layout_marginTop="8dp"
+            android:layout_marginBottom="8dp"
+            android:scrollbars="none"
             app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
-            app:layout_constraintBottom_toTopOf="@id/guideline16"
+            app:layout_constraintBottom_toTopOf="@id/guideline7"
             app:layout_constraintEnd_toEndOf="@id/guideline19"
             app:layout_constraintHorizontal_bias="0.0"
             app:layout_constraintStart_toStartOf="@id/guideline20"
-            app:layout_constraintTop_toBottomOf="@id/toolbar" />
-
-        <androidx.constraintlayout.widget.Guideline
-            android:id="@+id/guideline15"
-            style="@style/list_guideline_hor"
-            app:layout_constraintGuide_begin="24dp" />
-
-        <androidx.constraintlayout.widget.Guideline
-            android:id="@+id/guideline16"
-            style="@style/list_guideline_hor"
-            app:layout_constraintGuide_end="64dp" />
-
-        <androidx.constraintlayout.widget.Guideline
-            android:id="@+id/guideline17"
-            style="@style/list_guideline_hor"
-            app:layout_constraintGuide_end="24dp" />
+            app:layout_constraintTop_toBottomOf="@id/guideline11" />
 
         <androidx.constraintlayout.widget.Guideline
             android:id="@+id/guideline19"
@@ -61,6 +46,32 @@
             android:id="@+id/guideline20"
             style="@style/list_guideline_ver"
             app:layout_constraintGuide_begin="8dp" />
+
+        <androidx.constraintlayout.widget.Guideline
+            android:id="@+id/guideline22"
+            style="@style/list_guideline_hor"
+            app:layout_constraintGuide_begin="32dp" />
+
+        <androidx.constraintlayout.widget.Guideline
+            android:id="@+id/guideline7"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            app:layout_constraintGuide_end="16dp" />
+
+        <androidx.constraintlayout.widget.Guideline
+            android:id="@+id/guideline11"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            app:layout_constraintGuide_begin="76dp" />
+
+        <androidx.constraintlayout.widget.Guideline
+            android:id="@+id/guideline12"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            app:layout_constraintGuide_begin="48dp" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 

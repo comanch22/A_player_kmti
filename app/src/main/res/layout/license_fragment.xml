@@ -1,0 +1,146 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <data>
+        <variable
+            name="licenseViewModel"
+            type="comanch.simpleplayer.licenseFragment.LicenseViewModel" />
+    </data>
+
+    <ScrollView
+        android:id="@+id/scroll_view"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:overScrollMode="never">
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="?attr/colorOnPrimary">
+
+            <TextView
+                android:id="@+id/arrow_back"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="start"
+                android:contentDescription="@string/back_button"
+                android:background="@drawable/ic_baseline_detail_arrow_left_36"
+                app:layout_constraintBottom_toTopOf="@id/guideline11"
+                app:layout_constraintEnd_toStartOf="@id/guideline12"
+                app:layout_constraintStart_toStartOf="@id/guideline20"
+                app:layout_constraintTop_toBottomOf="@id/guideline22" />
+
+            <TextView
+                android:id="@+id/oss_license"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="8dp"
+                android:layout_marginStart="16dp"
+                android:layout_marginEnd="16dp"
+                android:background="@drawable/rectangle_for_license_button"
+                android:gravity="center"
+                android:onClick="@{() -> licenseViewModel.ossLicense()}"
+                android:padding="16dp"
+                android:text="@string/oss_license"
+                android:textColor="?attr/colorSecondary"
+                android:textSize="18sp"
+                android:layout_marginBottom="8dp"
+                app:layout_constraintBottom_toTopOf="@id/divider"
+                app:layout_constraintEnd_toStartOf="@id/guideline23"
+                app:layout_constraintStart_toStartOf="@id/guideline21"
+                app:layout_constraintTop_toBottomOf="@id/guideline11" />
+
+            <TextView
+                android:id="@+id/divider"
+                android:layout_width="match_parent"
+                android:layout_height="2dp"
+                android:background="@drawable/divider_about_app"
+                app:layout_constraintBottom_toTopOf="@id/font"
+                app:layout_constraintEnd_toStartOf="@id/guideline23"
+                app:layout_constraintStart_toStartOf="@id/guideline21"
+                app:layout_constraintTop_toBottomOf="@id/oss_license" />
+
+            <TextView
+                android:id="@+id/font"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:gravity="center"
+                android:padding="16dp"
+                android:text="@string/info_about_font"
+                android:textColor="?attr/colorSecondary"
+                android:textSize="18sp"
+                app:layout_constraintBottom_toTopOf="@id/divider_2"
+                app:layout_constraintEnd_toStartOf="@id/guideline23"
+                app:layout_constraintStart_toStartOf="@id/guideline21"
+                app:layout_constraintTop_toBottomOf="@id/divider" />
+
+            <TextView
+                android:id="@+id/divider_2"
+                android:layout_width="match_parent"
+                android:layout_height="2dp"
+                android:background="@drawable/divider_about_app"
+                app:layout_constraintBottom_toTopOf="@id/my_license"
+                app:layout_constraintEnd_toStartOf="@id/guideline23"
+                app:layout_constraintStart_toStartOf="@id/guideline21"
+                app:layout_constraintTop_toBottomOf="@id/font" />
+
+            <TextView
+                android:id="@+id/my_license"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:gravity="center"
+                android:padding="16dp"
+                android:text="@string/my_license"
+                android:textColor="?attr/colorSecondary"
+                android:textSize="18sp"
+                android:textIsSelectable="true"
+                app:layout_constraintEnd_toStartOf="@id/guideline23"
+                app:layout_constraintStart_toStartOf="@id/guideline21"
+                app:layout_constraintTop_toBottomOf="@id/divider_2" />
+
+            <androidx.constraintlayout.widget.Guideline
+                android:id="@+id/guideline21"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                app:layout_constraintGuide_begin="16dp" />
+
+            <androidx.constraintlayout.widget.Guideline
+                android:id="@+id/guideline22"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                app:layout_constraintGuide_begin="32dp" />
+
+            <androidx.constraintlayout.widget.Guideline
+                android:id="@+id/guideline23"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                app:layout_constraintGuide_end="16dp" />
+
+            <androidx.constraintlayout.widget.Guideline
+                android:id="@+id/guideline12"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                app:layout_constraintGuide_begin="48dp" />
+
+            <androidx.constraintlayout.widget.Guideline
+                android:id="@+id/guideline11"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                app:layout_constraintGuide_begin="76dp" />
+
+            <androidx.constraintlayout.widget.Guideline
+                android:id="@+id/guideline20"
+                style="@style/list_guideline_ver"
+                app:layout_constraintGuide_begin="8dp" />
+
+        </androidx.constraintlayout.widget.ConstraintLayout>
+    </ScrollView>
+
+</layout>

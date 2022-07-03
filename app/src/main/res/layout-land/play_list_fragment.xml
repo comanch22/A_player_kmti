@@ -9,64 +9,56 @@
     </data>
 
     <androidx.constraintlayout.widget.ConstraintLayout
-        style="@style/list_layout">
+        style="@style/list_layout"
+        android:transitionGroup="true">
 
-        <androidx.appcompat.widget.Toolbar
-            android:id="@+id/toolbar"
-            app:layout_constraintBottom_toTopOf="@id/list"
-            app:layout_constraintEnd_toStartOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent"
-            style="@style/list_toolbar">
-            <TextView
-                android:id="@+id/arrow_back"
-                android:layout_height="wrap_content"
-                android:layout_width="wrap_content"
-                android:background="@drawable/ic_baseline_detail_arrow_left_36"
-                android:layout_gravity="start"
-                />
-        </androidx.appcompat.widget.Toolbar>
+        <TextView
+            android:id="@+id/arrow_back"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:contentDescription="@string/back_button"
+            android:layout_gravity="start"
+            android:background="@drawable/ic_baseline_detail_arrow_left_36"
+            app:layout_constraintBottom_toTopOf="@id/guideline11"
+            app:layout_constraintEnd_toStartOf="@id/guideline12"
+            app:layout_constraintStart_toStartOf="@id/guideline20"
+            app:layout_constraintTop_toBottomOf="@id/guideline22" />
+
         <androidx.recyclerview.widget.RecyclerView
-
             android:id="@+id/list"
             style="@style/list_recycle"
+            android:layout_marginBottom="8dp"
+            android:layout_marginTop="8dp"
+            android:scrollbars="none"
             app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
             app:layout_constraintBottom_toTopOf="@id/guideline16"
             app:layout_constraintEnd_toEndOf="@id/guideline19"
             app:layout_constraintHorizontal_bias="0.0"
             app:layout_constraintStart_toStartOf="@id/guideline20"
-            app:layout_constraintTop_toBottomOf="@id/toolbar" />
+            app:layout_constraintTop_toBottomOf="@id/guideline11" />
 
         <TextView
             android:id="@+id/delete"
             style="@style/button_style"
+            android:contentDescription="@string/delete_playlist_button"
             android:background="@drawable/ic_baseline_delete_forever_48"
             app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toStartOf="@id/guideline8"
-            app:layout_constraintStart_toStartOf="@id/guideline20"
-            app:layout_constraintTop_toBottomOf="@id/guideline17" />
+            app:layout_constraintEnd_toEndOf="@id/guideline13"
+            app:layout_constraintStart_toStartOf="@id/guideline12"
+            app:layout_constraintTop_toBottomOf="@id/guideline7" />
 
         <TextView
             android:id="@+id/play"
             style="@style/button_style"
+            android:contentDescription="@string/play_button"
             android:background="@drawable/ic_baseline_play_arrow_48"
             app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toEndOf="@id/guideline19"
-            app:layout_constraintStart_toEndOf="@id/guideline8"
-            app:layout_constraintTop_toBottomOf="@id/guideline17" />
-
-        <androidx.constraintlayout.widget.Guideline
-            android:id="@+id/guideline15"
-            style="@style/list_guideline_hor"
-            app:layout_constraintGuide_begin="24dp" />
+            app:layout_constraintEnd_toStartOf="@id/guideline14"
+            app:layout_constraintStart_toEndOf="@id/guideline9"
+            app:layout_constraintTop_toBottomOf="@id/guideline7" />
 
         <androidx.constraintlayout.widget.Guideline
             android:id="@+id/guideline16"
-            style="@style/list_guideline_hor"
-            app:layout_constraintGuide_end="96dp" />
-
-        <androidx.constraintlayout.widget.Guideline
-            android:id="@+id/guideline17"
             style="@style/list_guideline_hor"
             app:layout_constraintGuide_end="72dp" />
 
@@ -81,12 +73,51 @@
             app:layout_constraintGuide_begin="8dp" />
 
         <androidx.constraintlayout.widget.Guideline
-            android:id="@+id/guideline8"
+            android:id="@+id/guideline22"
+            style="@style/list_guideline_hor"
+            app:layout_constraintGuide_begin="32dp" />
+
+        <androidx.constraintlayout.widget.Guideline
+            android:id="@+id/guideline11"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            app:layout_constraintGuide_begin="76dp" />
+
+        <androidx.constraintlayout.widget.Guideline
+            android:id="@+id/guideline12"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:orientation="vertical"
-            app:layout_constraintGuide_begin="207dp" />
+            app:layout_constraintGuide_begin="48dp" />
+
+        <androidx.constraintlayout.widget.Guideline
+            android:id="@+id/guideline13"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            app:layout_constraintGuide_begin="96dp" />
+
+        <androidx.constraintlayout.widget.Guideline
+            android:id="@+id/guideline9"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            app:layout_constraintGuide_end="104dp" />
+
+        <androidx.constraintlayout.widget.Guideline
+            android:id="@+id/guideline14"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            app:layout_constraintGuide_end="56dp" />
+
+        <androidx.constraintlayout.widget.Guideline
+            android:id="@+id/guideline7"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            app:layout_constraintGuide_end="72dp" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
-
 </layout>

@@ -17,12 +17,12 @@
     <androidx.constraintlayout.widget.ConstraintLayout
         android:id="@+id/itemLayout"
         android:layout_width="match_parent"
-        android:layout_height="64dp"
+        android:layout_height="72dp"
         android:layout_marginTop="4dp"
-        android:background="@drawable/rectangle_for_folder_name"
+        android:transitionGroup="true"
+        android:background="@drawable/rectangle_without_stroke"
         android:stateListAnimator="@animator/click_scale_anim"
-        android:onClick="@{() -> clickListener.onClick(item)}"
-        android:soundEffectsEnabled="false">
+        android:onClick="@{() -> clickListener.onClick(item)}">
 
         <TextView
             android:id="@+id/artist"
@@ -37,6 +37,7 @@
             android:id="@+id/title"
             style="@style/list_size12"
             android:gravity="center"
+            android:scrollbars="none"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toStartOf="@id/guideline6"
             app:layout_constraintStart_toStartOf="parent"

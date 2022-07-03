@@ -1,101 +1,110 @@
 package comanch.simpleplayer.playFragment
 
-import android.util.Log
-import androidx.lifecycle.*
-import comanch.simpleplayer.LiveDataEvent
+import androidx.lifecycle.viewModelScope
+import androidx.lifecycle.ViewModel
+import androidx.lifecycle.MutableLiveData
+import androidx.lifecycle.LiveData
+import comanch.simpleplayer.helpers.CompositeJob
+import comanch.simpleplayer.interfaces.InactiveScreenControlViewModel
+import comanch.simpleplayer.helpers.LiveDataEvent
+import comanch.simpleplayer.interfaces.SeekBarControlViewModel
 import comanch.simpleplayer.dataBase.MusicTrack
 import comanch.simpleplayer.dataBase.MusicTrackDAO
 import dagger.hilt.android.lifecycle.HiltViewModel
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Job
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
-
 @HiltViewModel
-class PlayViewModel @Inject constructor(private val databaseMusic: MusicTrackDAO) : ViewModel() {
+class PlayViewModel @Inject constructor(private val databaseMusic: MusicTrackDAO) : ViewModel(),
+    SeekBarControlViewModel, InactiveScreenControlViewModel {
 
     val items = databaseMusic.getCurrentItems()
-    private var isCheckPos = false
 
-    private var _start = MutableLiveData<LiveDataEvent<Int?>>()
-    val start: LiveData<LiveDataEvent<Int?>>
-        get() = _start
+    override val scope: CoroutineScope = viewModelScope
+    override val compositeJob: CompositeJob = CompositeJob()
+    override var isCheckPos = false
+    override var checkPosOpen = MutableLiveData<LiveDataEvent<Int?>>()
+    override var checkPosOnceOpen = MutableLiveData<LiveDataEvent<Int?>>()
+    override var checkCurrentPosJob: Job = Job()
+    override var checkCurrentPosJobName = ""
 
-    private var _checkPos = MutableLiveData<LiveDataEvent<Int?>>()
-    val checkPos: LiveData<LiveDataEvent<Int?>>
-        get() = _checkPos
+    override val compositeJobInactiveScreen: CompositeJob = CompositeJob()
+    override var checkScreenInactiveJob: Job = Job()
+    override var checkScreenInactiveOpen = MutableLiveData<LiveDataEvent<Int?>>()
+    override var checkScreenInactiveJobName = ""
+    override var navigateToImageScreenOpen = MutableLiveData<LiveDataEvent<Int?>>()
 
-    private var _scrollList = MutableLiveData<LiveDataEvent<Int?>>()
+    private val _scrollList = MutableLiveData<LiveDataEvent<Int?>>()
     val scrollList: LiveData<LiveDataEvent<Int?>>
         get() = _scrollList
 
-    private var _sendStop = MutableLiveData<LiveDataEvent<String?>>()
+    private val _setPlayPauseVisible = MutableLiveData<LiveDataEvent<Boolean?>>()
+    val setPlayPauseVisible: LiveData<LiveDataEvent<Boolean?>>
+        get() = _setPlayPauseVisible
+
+    private val _trackActiveUpdate = MutableLiveData<LiveDataEvent<Int?>>()
+    val trackActiveUpdate: LiveData<LiveDataEvent<Int?>>
+        get() = _trackActiveUpdate
+
+    private val _stopStartPlayNewTrack = MutableLiveData<LiveDataEvent<MusicTrack?>>()
+    val stopStartPlayNewTrack: LiveData<LiveDataEvent<MusicTrack?>>
+        get() = _stopStartPlayNewTrack
+
+    private val _sendStop = MutableLiveData<LiveDataEvent<String?>>()
     val sendStop: LiveData<LiveDataEvent<String?>>
         get() = _sendStop
 
-    private var _longStart = MutableLiveData<LiveDataEvent<Int?>>()
-    val longStart: LiveData<LiveDataEvent<Int?>>
-        get() = _longStart
-
-    private var _longStop = MutableLiveData<LiveDataEvent<Int?>>()
-    val longStop: LiveData<LiveDataEvent<Int?>>
-        get() = _longStop
-
-    private var _click = MutableLiveData<LiveDataEvent<MusicTrack?>>()
+    private val _click = MutableLiveData<LiveDataEvent<MusicTrack?>>()
     val click: LiveData<LiveDataEvent<MusicTrack?>>
         get() = _click
 
-    private var _longClick = MutableLiveData<LiveDataEvent<MusicTrack?>>()
-    val longClick: LiveData<LiveDataEvent<MusicTrack?>>
-        get() = _longClick
+    private val _playClick = MutableLiveData<LiveDataEvent<MusicTrack?>>()
+    val playClick: LiveData<LiveDataEvent<MusicTrack?>>
+        get() = _playClick
 
-    private var _getActiveListForDelete = MutableLiveData<LiveDataEvent<MutableList<MusicTrack>?>>()
-    val getActiveListForDelete: LiveData<LiveDataEvent<MutableList<MusicTrack>?>>
-        get() = _getActiveListForDelete
+    fun setPlayPauseVisible(b: Boolean) {
+        _setPlayPauseVisible.value = LiveDataEvent(b)
+    }
 
     fun onItemClicked(item: MusicTrack) {
         _click.value = LiveDataEvent(item)
     }
 
-    fun onItemLongClicked(item: MusicTrack): Boolean {
-        _longClick.value = LiveDataEvent(item)
-        return true
+    fun onPlayClicked(item: MusicTrack) {
+        _playClick.value = LiveDataEvent(item)
     }
 
     fun trackActiveEnable(musicTrack: MusicTrack) {
         viewModelScope.launch {
             musicTrack.active = 1
-            databaseMusic.update(musicTrack)
-        }
-    }
-
-    fun trackActiveLongEnable(musicTrack: MusicTrack) {
-        viewModelScope.launch {
-            _longStop.value = LiveDataEvent(1)
-            delay(200)
-            musicTrack.active = 1
-            databaseMusic.update(musicTrack)
-            _longStart.value = LiveDataEvent(1)
+            musicTrack.isButtonPlayVisible = 1
+            if (databaseMusic.update(musicTrack) > 0) {
+                _trackActiveUpdate.value = LiveDataEvent(musicTrack.position)
+            }
         }
     }
 
     fun trackActiveDisable(musicTrack: MusicTrack) {
         viewModelScope.launch {
             musicTrack.active = 0
+            musicTrack.isButtonPlayVisible = 0
             databaseMusic.update(musicTrack)
-            _sendStop.value = LiveDataEvent(musicTrack.musicId)
+            if (databaseMusic.update(musicTrack) > 0) {
+                _trackActiveUpdate.value = LiveDataEvent(musicTrack.position)
+                _sendStop.value = LiveDataEvent(musicTrack.musicId)
+            }
         }
     }
 
-    fun setIsCheckPos(b: Boolean) {
-        isCheckPos = b
-    }
-
-    fun startCheckCurrentPos() {
-        if (isCheckPos) {
-            viewModelScope.launch {
-                delay(500)
-                _checkPos.value = LiveDataEvent(1)
+    fun buttonPlayDisableAndStart(musicTrack: MusicTrack) {
+        viewModelScope.launch {
+            musicTrack.isButtonPlayVisible = 0
+            if (databaseMusic.update(musicTrack) > 0) {
+                _trackActiveUpdate.value = LiveDataEvent(musicTrack.position)
+                _stopStartPlayNewTrack.value = LiveDataEvent(musicTrack)
             }
         }
     }
@@ -107,12 +116,7 @@ class PlayViewModel @Inject constructor(private val databaseMusic: MusicTrackDAO
             _scrollList.value = LiveDataEvent(pos)
         }
     }
-
-    fun startCheckCurrentPosOnce() {
-        viewModelScope.launch {
-            _checkPos.value = LiveDataEvent(1)
-        }
-    }
 }
+
 
 

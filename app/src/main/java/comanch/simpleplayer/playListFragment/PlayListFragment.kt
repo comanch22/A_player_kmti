@@ -9,9 +9,12 @@ import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
 import androidx.fragment.app.viewModels
-import comanch.simpleplayer.*
+import comanch.simpleplayer.StateViewModel
+import comanch.simpleplayer.R
 import comanch.simpleplayer.dataBase.PlayList
 import comanch.simpleplayer.databinding.PlayListFragmentBinding
+import comanch.simpleplayer.helpers.NavigationBetweenFragments
+import comanch.simpleplayer.helpers.NavigationCorrespondent
 import dagger.hilt.android.AndroidEntryPoint
 import javax.inject.Inject
 
@@ -22,17 +25,14 @@ class PlayListFragment : Fragment() {
     private val stateViewModel: StateViewModel by activityViewModels()
 
     @Inject
-    lateinit var soundPoolContainer: SoundPoolForFragments
-
-    @Inject
     lateinit var navigation: NavigationBetweenFragments
 
     private var adapter: PlayListItemAdapter? = null
     private var playList: List<PlayList>? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
-
         super.onCreate(savedInstanceState)
+
         val action = PlayListFragmentDirections.actionPlayListFragmentToListFragment()
         val callback = requireActivity().onBackPressedDispatcher.addCallback(this) {
             navigation.navigateToDestination(
@@ -41,10 +41,6 @@ class PlayListFragment : Fragment() {
             )
         }
         callback.isEnabled = true
-
-        soundPoolContainer.soundPool.setOnLoadCompleteListener { _, sampleId, status ->
-            soundPoolContainer.soundMap[sampleId] = status
-        }
     }
 
     override fun onCreateView(
@@ -65,6 +61,7 @@ class PlayListFragment : Fragment() {
             })
 
         binding.list.adapter = adapter
+        binding.list.itemAnimator = null
         binding.lifecycleOwner = viewLifecycleOwner
 
         playlistViewModel.items.observe(viewLifecycleOwner) { list ->
@@ -91,7 +88,9 @@ class PlayListFragment : Fragment() {
             content.getContentIfNotHandled()?.let {
                 navigation.navigateToDestination(
                     this@PlayListFragment,
-                    PlayListFragmentDirections.actionPlayListFragmentToPlayFragment()
+                    PlayListFragmentDirections.actionPlayListFragmentToPlayFragment(
+                        NavigationCorrespondent.PlayListFragment
+                    )
                 )
             }
         }
@@ -109,7 +108,6 @@ class PlayListFragment : Fragment() {
         }
 
         binding.arrowBack.setOnClickListener {
-            soundPoolContainer.playSoundIfEnable(soundPoolContainer.soundButtonTap)
             navigation.navigateToDestination(
                 this@PlayListFragment,
                 PlayListFragmentDirections.actionPlayListFragmentToListFragment()
@@ -117,20 +115,12 @@ class PlayListFragment : Fragment() {
         }
 
         binding.delete.setOnClickListener {
-            soundPoolContainer.playSoundIfEnable(soundPoolContainer.soundButtonTap)
             playlistViewModel.delete()
         }
 
         binding.play.setOnClickListener {
-            soundPoolContainer.playSoundIfEnable(soundPoolContainer.soundButtonTap)
             playlistViewModel.getPlaylists()
         }
         return binding.root
-    }
-
-    override fun onResume() {
-
-        super.onResume()
-        soundPoolContainer.setTouchSound()
     }
 }

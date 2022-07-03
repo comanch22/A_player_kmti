@@ -29,13 +29,13 @@
         <activity android:name="com.google.android.gms.oss.licenses.OssLicensesActivity"
             android:theme="@style/licensesTheme"/>
         <service
-            android:name=".ServicePlay"
+            android:name=".musicManagment.ServicePlay"
             android:exported="false">
             <intent-filter>
                 <action android:name="android.intent.action.MEDIA_BUTTON" />
             </intent-filter>
         </service>
-        <receiver android:name=".MusicReceiver"
+        <receiver android:name=".musicManagment.MusicReceiver"
             android:exported="true">
             <intent-filter>
                 <action android:name="android.media.AUDIO_BECOMING_NOISY" />

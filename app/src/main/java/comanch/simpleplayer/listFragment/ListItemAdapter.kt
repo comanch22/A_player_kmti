@@ -39,6 +39,11 @@ class ListItemAdapter(
         mRecyclerView = recyclerView
     }
 
+    override fun onDetachedFromRecyclerView(recyclerView: RecyclerView) {
+        mRecyclerView = null
+        super.onDetachedFromRecyclerView(recyclerView)
+    }
+
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
         return ViewHolder.from(parent)
     }
@@ -82,7 +87,7 @@ class ListItemAdapter(
             if (item.active == 1) {
                 binding.folderName.setBackgroundResource(R.drawable.rectangle_with_stroke)
             } else {
-                binding.folderName.setBackgroundResource(R.drawable.rectangle_for_folder_name)
+                binding.folderName.setBackgroundResource(R.drawable.rectangle_without_stroke)
             }
         }
     }
