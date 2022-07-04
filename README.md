@@ -23,3 +23,6 @@ You can choose images for backgrounds and choose a different style.
   <img src="https://github.com/comanch22/ValleyWindAwake/blob/main/Screenshot_20220704-145750_A_player_kmti.jpg" width="203" height="360">
   <img src="https://github.com/comanch22/ValleyWindAwake/blob/main/Screenshot_20220704-145959_A_player_kmti.jpg" width="203" height="360">
 </p>
+
+this is a simple music player, freed from an excess of little-used functions, but having its own characteristics.
+Enjoy using it!
