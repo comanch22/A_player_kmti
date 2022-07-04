@@ -18,7 +18,7 @@ Right during playback, you can delete tracks by doing right or left swipe (or us
 You can choose images for backgrounds and choose a different style.
 
 <p align="left">
-  <img src="https://github.com/comanch22/ValleyWindAwake/blob/main/file3.png" width="512" height="360">
+  <img src="https://github.com/comanch22/ValleyWindAwake/blob/main/file4.png" width="380" height="360">
   <img src="https://github.com/comanch22/ValleyWindAwake/blob/main/Screenshot_20220704-145744_A_player_kmti.jpg" width="203" height="360">
   <img src="https://github.com/comanch22/ValleyWindAwake/blob/main/Screenshot_20220704-145750_A_player_kmti.jpg" width="203" height="360">
   <img src="https://github.com/comanch22/ValleyWindAwake/blob/main/Screenshot_20220704-145959_A_player_kmti.jpg" width="203" height="360">
