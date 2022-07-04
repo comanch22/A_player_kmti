@@ -48,7 +48,18 @@
        See the License for the specific language governing permissions and \n
         limitations under the License. \n
     </string>
-    <string name="info_about_app">"simple audio player, dynamic playlist management from the screen, saving playlists and other functions. Enjoy using it!"</string>
+    <string name="info_about_app">"this is a simple music player, freed from an excess of little-used functions, but having its own characteristics. Enjoy using it!"
+    \n
+        \n
+        When forming a playlist, you can select a saved playlists or create a new list by selecting the list of necessary catalogs in whole or individual tracks from catalogs.
+        (click on the catalog icon to open it)
+        \n
+        \n
+        The playlist is implemented in the form of a list, which can be controlled dynamically by touching, in addition to the standard control buttons. Right during playback, you can delete tracks by doing right or left swipe (or using the delete button with multiple selections), pinch and drag any track to any place in the list, group tracks by moving the selected ones to the top of the list (to do this, you need to select several melodies and press play, they will automatically move to the top), and also use standard control functions, for example, go to the next track, pause, move, turn on repeat mode and e.t.c.
+        \n
+        \n
+        On the background selection page, you can define the background for the splash screen and the notification screen, you can also change the style of the application in the settings
+    </string>
     <string name="request_date">request date</string>
     <string name="playlist_name">playlist name</string>
     <string name="default_playlist">default playlist</string>
