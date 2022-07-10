@@ -311,6 +311,12 @@ class StateViewModel @Inject constructor(
         musicActiveList.clear()
     }
 
+    fun setIsRepeat(i: Int) {
+
+        setIsRepeat = i
+        _isRepeat.value = LiveDataEvent(setIsRepeat)
+    }
+
     fun setIsRepeat() {
 
         setIsRepeat = when (setIsRepeat) {

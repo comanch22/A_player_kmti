@@ -5,6 +5,7 @@ class PreferenceKeys {
     companion object {
 
         const val backButton = "backButton"
+        const val repeat = "repeat"
         const val isAutoScroll = "isAutoScroll"
         const val previewUri = "previewUri"
         const val playScreenUri = "playScreenUri"

@@ -25,6 +25,12 @@ class DefaultPreference @Inject constructor(private val preference: SharedPrefer
         return preference.getBoolean(key, defaultValue!!)
     }
 
+    fun getInt(key: String): Int {
+
+        val defaultValue = 0
+        return preference.getInt(key, defaultValue)
+    }
+
     fun putBoolean(key: String, value: Boolean) {
 
         with(preference.edit()) {
@@ -37,6 +43,14 @@ class DefaultPreference @Inject constructor(private val preference: SharedPrefer
 
         with(preference.edit()){
             putString(key, value)
+            apply()
+        }
+    }
+
+    fun putInt(key: String, value: Int){
+
+        with(preference.edit()){
+            putInt(key, value)
             apply()
         }
     }

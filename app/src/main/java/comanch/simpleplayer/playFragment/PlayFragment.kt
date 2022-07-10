@@ -251,7 +251,7 @@ class PlayFragment : Fragment() {
         binding.list.itemAnimator = null
         binding.lifecycleOwner = viewLifecycleOwner
 
-        stateViewModel.restartIsRepeat()
+        stateViewModel.setIsRepeat(preferences.getInt(PreferenceKeys.repeat))
 
         playViewModel.addScreenInactiveJob()
         if (imageUri?.isNotEmpty() == true) {
@@ -342,6 +342,7 @@ class PlayFragment : Fragment() {
                 val intent = Intent(StringKey.isRepeat)
                 intent.putExtra(StringKey.isRepeat, it)
                 LocalBroadcastManager.getInstance(this.requireContext()).sendBroadcast(intent)
+                preferences.putInt(PreferenceKeys.repeat, it)
             }
         }
 
