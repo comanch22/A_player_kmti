@@ -1,6 +1,10 @@
 This music player has several features
 
-when forming a playlist, you can select a saved playlist or create a new list by selecting the list of necessary catalogs in whole or individual tracks from catalogs.
+<p align="left">
+  <img src="https://github.com/comanch22/ValleyWindAwake/blob/main/Screenshot_20220704-145750_A_player_kmti.jpg" width="100" height="177">
+</p>
+
+when forming a playlist, you can select a saved playlist or create a new list by selecting the list of necessary catalogs in whole or individual tracks from catalogs. 
 
 <p align="left">
   <img src="https://github.com/comanch22/ValleyWindAwake/blob/main/file1.png" width="512" height="360">
