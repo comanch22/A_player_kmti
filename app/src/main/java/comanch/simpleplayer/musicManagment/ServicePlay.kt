@@ -691,203 +691,212 @@ class ServicePlay : Service(),
         when (action) {
 
             PlaybackStateCompat.STATE_PLAYING -> {
-
-                val newJob = Job()
-                job.add(newJob)
-                val mCoroutineScope = CoroutineScope(newJob + Dispatchers.IO)
-                mCoroutineScope.launch {
-
-                    if (databaseMusic.getCount() == 0) {
-                        setNoneState()
-                        return@launch
-                    }
-
-                    if (databaseMusic.getFirstActive() == null) {
-                        playFirstItem()
-                        return@launch
-                    } else {
-                        if (databaseMusic.getPlaylistByActive(1)?.size == 1) {
-                            playOnlyOneActiveItem()
-                            return@launch
-                        }
-                    }
-
-                    currentTrack = databaseMusic.getFirstActive()
-
-                    if (currentTrack == null) {
-                        return@launch
-                    }
-
-                    val sortList = mutableListOf<MusicTrack>()
-                    databaseMusic.sortByActiveAndWithoutItem(currentTrack!!.musicTrackId)
-                        ?.let { sortList.addAll(it) }
-                    sortList.forEach {
-                        it.active = 0
-                    }
-
-                    sortList.add(0, currentTrack!!)
-                    val insertList = mutableListOf<MusicTrack>()
-                    sortList.forEach {
-                        val item = MusicTrack()
-                        item.myCopy(it)
-                        item.active = it.active
-                        item.isPlaying = false
-                        item.playListName = StringKey.currentList
-                        insertList.add(item)
-                    }
-
-                    databaseMusic.listDelByNameInsNewList(StringKey.currentList, insertList)
-                    currentTrack?.isPlaying = true
-                    databaseMusic.update(currentTrack!!)
-                    localBroadcastManager?.sendBroadcast(Intent(StringKey.UpdateCurrentTrack))
-                }
+                processingStatePlay()
             }
 
             PlaybackStateCompat.STATE_SKIPPING_TO_NEXT -> {
-
-                val newJob = Job()
-                job.add(newJob)
-                val mCoroutineScope = CoroutineScope(newJob + Dispatchers.IO)
-                mCoroutineScope.launch {
-
-                    val mediaSessionState = mediaSession?.controller?.playbackState?.state
-
-                    if (databaseMusic.getCount() == 0) {
-                        setNoneState()
-                        return@launch
-                    }
-
-                    if (isRepeat == 2 && mediaSessionState != PlaybackStateCompat.STATE_STOPPED) {
-                        currentTrack?.let {
-                            it.active = 1
-                            databaseMusic.update(it)
-                            localBroadcastManager?.sendBroadcast(Intent(StringKey.UpdateCurrentTrack))
-                            return@launch
-                        }
-                    }
-
-                    var currentTrackByMusId = databaseMusic.getIsPlaying()
-
-                    if (currentTrackByMusId == null &&
-                        (mediaSessionState != PlaybackStateCompat.STATE_PLAYING ||
-                                mediaSessionState != PlaybackStateCompat.STATE_PAUSED)
-                    ) {
-                        currentTrackByMusId = databaseMusic.getFirstActive()
-                        setInactiveForListItems()
-
-                        currentTrackByMusId?.musicTrackId?.let {
-                            val nextActiveTrack = databaseMusic.getNextTrackByKey(it)
-                            nextActiveTrack?.let { track ->
-                                track.active = 1
-                                databaseMusic.update(track)
-                                mediaSessionSetStopped()
-                                return@launch
-                            }
-                        }
-                    } else {
-                        currentTrack = currentTrackByMusId
-                    }
-
-                    val nextTrack = currentTrackByMusId?.musicTrackId?.let {
-                        databaseMusic.getNextTrackByKey(it)
-                    }
-
-                    setInactiveForListItems()
-
-                    if (nextTrack == null && mediaSessionState != PlaybackStateCompat.STATE_STOPPED) {
-
-                        when (isRepeat) {
-                            0 -> {
-                                pausePosition = 0
-                                mediaSession?.controller?.transportControls?.stop()
-                            }
-                            1 -> {
-                                currentTrack?.isPlaying = false
-                                currentTrack?.active = 0
-                                databaseMusic.update(currentTrack!!)
-                                repeatList()
-                            }
-                            2 -> {
-                                repeatTrack()
-                            }
-                        }
-                    } else {
-                        currentTrack?.let {
-                            it.isPlaying = false
-                            it.active = 0
-                            if (databaseMusic.update(it) > 0) {
-                                playNextTrack(nextTrack)
-                            }
-                        }
-                    }
-                }
+                processingSkippingToNext()
             }
 
             PlaybackStateCompat.STATE_SKIPPING_TO_PREVIOUS -> {
+                processingSkippingToPrevious()
+            }
+        }
+    }
 
-                val newJob = Job()
-                job.add(newJob)
-                val mCoroutineScope = CoroutineScope(newJob + Dispatchers.IO)
-                mCoroutineScope.launch {
+    private fun processingSkippingToPrevious() {
+        val newJob = Job()
+        job.add(newJob)
+        val mCoroutineScope = CoroutineScope(newJob + Dispatchers.IO)
+        mCoroutineScope.launch {
 
-                    val mediaSessionState = mediaSession?.controller?.playbackState?.state
+            val mediaSessionState = mediaSession?.controller?.playbackState?.state
 
-                    if (databaseMusic.getCount() == 0) {
-                        setNoneState()
+            if (databaseMusic.getCount() == 0) {
+                setNoneState()
+                return@launch
+            }
+
+            var currentTrackByMusId = databaseMusic.getIsPlaying()
+
+            if (currentTrackByMusId == null &&
+                (mediaSessionState != PlaybackStateCompat.STATE_PLAYING ||
+                        mediaSessionState != PlaybackStateCompat.STATE_PAUSED)
+            ) {
+                currentTrackByMusId = databaseMusic.getFirstActive()
+                setInactiveForListItems()
+
+                currentTrackByMusId?.musicTrackId?.let {
+                    val previousActiveTrack = databaseMusic.getPreviousTrackByKey(it)
+                    previousActiveTrack?.let { track ->
+                        track.active = 1
+                        databaseMusic.update(track)
+                        mediaSessionSetStopped()
                         return@launch
                     }
+                }
+            } else {
+                currentTrack = currentTrackByMusId
+            }
 
-                    var currentTrackByMusId = databaseMusic.getIsPlaying()
+            val previousTrack = currentTrackByMusId?.musicTrackId?.let {
+                databaseMusic.getPreviousTrackByKey(
+                    it
+                )
+            }
 
-                    if (currentTrackByMusId == null &&
-                        (mediaSessionState != PlaybackStateCompat.STATE_PLAYING ||
-                                mediaSessionState != PlaybackStateCompat.STATE_PAUSED)
-                    ) {
-                        currentTrackByMusId = databaseMusic.getFirstActive()
-                        setInactiveForListItems()
+            setInactiveForListItems()
 
-                        currentTrackByMusId?.musicTrackId?.let {
-                            val previousActiveTrack = databaseMusic.getPreviousTrackByKey(it)
-                            previousActiveTrack?.let { track ->
-                                track.active = 1
-                                databaseMusic.update(track)
-                                mediaSessionSetStopped()
-                                return@launch
-                            }
-                        }
-                    } else {
-                        currentTrack = currentTrackByMusId
-                    }
-
-                    val previousTrack = currentTrackByMusId?.musicTrackId?.let {
-                        databaseMusic.getPreviousTrackByKey(
-                            it
-                        )
-                    }
-
-                    setInactiveForListItems()
-
-                    if (previousTrack == null) {
-                        currentTrack?.let {
-                            it.active = 1
-                            databaseMusic.update(it)
-                            localBroadcastManager?.sendBroadcast(Intent(StringKey.UpdateCurrentTrack))
-                        }
-                    } else {
-                        currentTrack?.isPlaying = false
-                        currentTrack?.active = 0
-                        if (databaseMusic.update(currentTrack!!) > 0) {
-                            currentTrack = previousTrack
-                            currentTrack?.let {
-                                it.active = 1
-                                it.isPlaying = true
-                                databaseMusic.update(it)
-                                localBroadcastManager?.sendBroadcast(Intent(StringKey.UpdateCurrentTrack))
-                            }
-                        }
+            if (previousTrack == null) {
+                currentTrack?.let {
+                    it.active = 1
+                    databaseMusic.update(it)
+                    localBroadcastManager?.sendBroadcast(Intent(StringKey.UpdateCurrentTrack))
+                }
+            } else {
+                currentTrack?.isPlaying = false
+                currentTrack?.active = 0
+                if (databaseMusic.update(currentTrack!!) > 0) {
+                    currentTrack = previousTrack
+                    currentTrack?.let {
+                        it.active = 1
+                        it.isPlaying = true
+                        databaseMusic.update(it)
+                        localBroadcastManager?.sendBroadcast(Intent(StringKey.UpdateCurrentTrack))
                     }
                 }
             }
+        }
+    }
+
+    private fun processingSkippingToNext() {
+        val newJob = Job()
+        job.add(newJob)
+        val mCoroutineScope = CoroutineScope(newJob + Dispatchers.IO)
+        mCoroutineScope.launch {
+
+            val mediaSessionState = mediaSession?.controller?.playbackState?.state
+
+            if (databaseMusic.getCount() == 0) {
+                setNoneState()
+                return@launch
+            }
+
+            if (isRepeat == 2 && mediaSessionState != PlaybackStateCompat.STATE_STOPPED) {
+                currentTrack?.let {
+                    it.active = 1
+                    databaseMusic.update(it)
+                    localBroadcastManager?.sendBroadcast(Intent(StringKey.UpdateCurrentTrack))
+                    return@launch
+                }
+            }
+
+            var currentTrackByMusId = databaseMusic.getIsPlaying()
+
+            if (currentTrackByMusId == null &&
+                (mediaSessionState != PlaybackStateCompat.STATE_PLAYING ||
+                        mediaSessionState != PlaybackStateCompat.STATE_PAUSED)
+            ) {
+                currentTrackByMusId = databaseMusic.getFirstActive()
+                setInactiveForListItems()
+
+                currentTrackByMusId?.musicTrackId?.let {
+                    val nextActiveTrack = databaseMusic.getNextTrackByKey(it)
+                    nextActiveTrack?.let { track ->
+                        track.active = 1
+                        databaseMusic.update(track)
+                        mediaSessionSetStopped()
+                        return@launch
+                    }
+                }
+            } else {
+                currentTrack = currentTrackByMusId
+            }
+
+            val nextTrack = currentTrackByMusId?.musicTrackId?.let {
+                databaseMusic.getNextTrackByKey(it)
+            }
+
+            setInactiveForListItems()
+
+            if (nextTrack == null && mediaSessionState != PlaybackStateCompat.STATE_STOPPED) {
+
+                when (isRepeat) {
+                    0 -> {
+                        pausePosition = 0
+                        mediaSession?.controller?.transportControls?.stop()
+                    }
+                    1 -> {
+                        currentTrack?.isPlaying = false
+                        currentTrack?.active = 0
+                        databaseMusic.update(currentTrack!!)
+                        repeatList()
+                    }
+                    2 -> {
+                        repeatTrack()
+                    }
+                }
+            } else {
+                currentTrack?.let {
+                    it.isPlaying = false
+                    it.active = 0
+                    if (databaseMusic.update(it) > 0) {
+                        playNextTrack(nextTrack)
+                    }
+                }
+            }
+        }
+    }
+
+    private fun processingStatePlay() {
+        val newJob = Job()
+        job.add(newJob)
+        val mCoroutineScope = CoroutineScope(newJob + Dispatchers.IO)
+        mCoroutineScope.launch {
+
+            if (databaseMusic.getCount() == 0) {
+                setNoneState()
+                return@launch
+            }
+
+            if (databaseMusic.getFirstActive() == null) {
+                playFirstItem()
+                return@launch
+            } else {
+                if (databaseMusic.getPlaylistByActive(1)?.size == 1) {
+                    playOnlyOneActiveItem()
+                    return@launch
+                }
+            }
+
+            currentTrack = databaseMusic.getFirstActive()
+
+            if (currentTrack == null) {
+                return@launch
+            }
+
+            val sortList = mutableListOf<MusicTrack>()
+            databaseMusic.sortByActiveAndWithoutItem(currentTrack!!.musicTrackId)
+                ?.let { sortList.addAll(it) }
+            sortList.forEach {
+                it.active = 0
+            }
+
+            sortList.add(0, currentTrack!!)
+            val insertList = mutableListOf<MusicTrack>()
+            sortList.forEach {
+                val item = MusicTrack()
+                item.myCopy(it)
+                item.active = it.active
+                item.isPlaying = false
+                item.playListName = StringKey.currentList
+                insertList.add(item)
+            }
+
+            databaseMusic.listDelByNameInsNewList(StringKey.currentList, insertList)
+            currentTrack?.isPlaying = true
+            databaseMusic.update(currentTrack!!)
+            localBroadcastManager?.sendBroadcast(Intent(StringKey.UpdateCurrentTrack))
         }
     }
 
