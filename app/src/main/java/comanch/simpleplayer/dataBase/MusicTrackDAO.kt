@@ -3,7 +3,6 @@ package comanch.simpleplayer.dataBase
 import androidx.lifecycle.LiveData
 import androidx.room.*
 import comanch.simpleplayer.helpers.StringKey
-import java.util.*
 
 @Dao
 interface MusicTrackDAO {
@@ -24,7 +23,7 @@ interface MusicTrackDAO {
     suspend fun delete(musicTrack: MusicTrack)
 
     @Transaction
-    suspend fun listDelByNameInsByList(deleteListName: String, playlist: List<MusicTrack>) {
+    suspend fun listDelByNameInsNewList(deleteListName: String, playlist: List<MusicTrack>) {
         deletePlaylist(deleteListName)
         insertPlayList(playlist)
     }
@@ -80,7 +79,7 @@ interface MusicTrackDAO {
                     insertList.add(first)
                 }
             }
-            listDelByNameInsByList(StringKey.currentList, insertList.toList())
+            listDelByNameInsNewList(StringKey.currentList, insertList.toList())
         }
     }
 

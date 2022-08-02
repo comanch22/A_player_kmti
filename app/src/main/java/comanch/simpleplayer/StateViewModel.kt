@@ -138,7 +138,7 @@ class StateViewModel @Inject constructor(
                     item.playListName = StringKey.currentList
                     insertList.add(item)
                 }
-                databaseMusic.listDelByNameInsByList(StringKey.currentList, insertList.toList())
+                databaseMusic.listDelByNameInsNewList(StringKey.currentList, insertList.toList())
             }
         }
     }
@@ -159,7 +159,7 @@ class StateViewModel @Inject constructor(
                     item.playListName = StringKey.currentList
                     insertList.add(item)
                 }
-                databaseMusic.listDelByNameInsByList(StringKey.currentList, insertList)
+                databaseMusic.listDelByNameInsNewList(StringKey.currentList, insertList)
                // databaseMusic.insertPlayList(shuffleList)
             }
         }
@@ -230,7 +230,7 @@ class StateViewModel @Inject constructor(
                 item.playListName = name
                 insertList.add(item)
             }
-            databaseMusic.listDelByNameInsByList(name, insertList.toList())
+            databaseMusic.listDelByNameInsNewList(name, insertList.toList())
         }
     }
 

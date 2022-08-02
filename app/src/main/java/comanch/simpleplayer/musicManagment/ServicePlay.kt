@@ -47,7 +47,6 @@ import kotlinx.coroutines.Job
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
-import kotlinx.coroutines.delay
 import javax.inject.Inject
 
 @AndroidEntryPoint
@@ -702,11 +701,6 @@ class ServicePlay : Service(),
                 val mCoroutineScope = CoroutineScope(newJob + Dispatchers.IO)
                 mCoroutineScope.launch {
 
-   /*                 if (databaseIsBlock) {
-                        delay(100)
-                    }
-                    databaseIsBlock = true*/
-
                     if (databaseMusic.getCount() == 0) {
                         setNoneState()
                         return@launch
@@ -714,20 +708,17 @@ class ServicePlay : Service(),
 
                     if (databaseMusic.getFirstActive() == null) {
                         playFirstItem()
-                     //   databaseIsBlock = false
                         return@launch
                     } else {
-                        if (databaseMusic.getPlaylistByActive(1)?.size == 1
-                        ) {
+                        if (databaseMusic.getPlaylistByActive(1)?.size == 1) {
                             playOnlyOneActiveItem()
-                          //  databaseIsBlock = false
                             return@launch
                         }
                     }
 
                     currentTrack = databaseMusic.getFirstActive()
+
                     if (currentTrack == null) {
-                      //  databaseIsBlock = false
                         return@launch
                     }
 
@@ -749,7 +740,7 @@ class ServicePlay : Service(),
                         insertList.add(item)
                     }
 
-                    databaseMusic.listDelByNameInsByList(StringKey.currentList, insertList)
+                    databaseMusic.listDelByNameInsNewList(StringKey.currentList, insertList)
                     currentTrack?.isPlaying = true
                     databaseMusic.update(currentTrack!!)
                     localBroadcastManager?.sendBroadcast(Intent(StringKey.UpdateCurrentTrack))
@@ -779,8 +770,8 @@ class ServicePlay : Service(),
                         }
                     }
 
-                    var currentTrackByMusId =
-                        databaseMusic.getIsPlaying()
+                    var currentTrackByMusId = databaseMusic.getIsPlaying()
+
                     if (currentTrackByMusId == null &&
                         (mediaSessionState != PlaybackStateCompat.STATE_PLAYING ||
                                 mediaSessionState != PlaybackStateCompat.STATE_PAUSED)
@@ -802,9 +793,7 @@ class ServicePlay : Service(),
                     }
 
                     val nextTrack = currentTrackByMusId?.musicTrackId?.let {
-                        databaseMusic.getNextTrackByKey(
-                            it
-                        )
+                        databaseMusic.getNextTrackByKey(it)
                     }
 
                     setInactiveForListItems()
@@ -852,14 +841,13 @@ class ServicePlay : Service(),
                         return@launch
                     }
 
-                    var currentTrackByMusId =
-                        databaseMusic.getIsPlaying()
+                    var currentTrackByMusId = databaseMusic.getIsPlaying()
+
                     if (currentTrackByMusId == null &&
                         (mediaSessionState != PlaybackStateCompat.STATE_PLAYING ||
                                 mediaSessionState != PlaybackStateCompat.STATE_PAUSED)
                     ) {
                         currentTrackByMusId = databaseMusic.getFirstActive()
-
                         setInactiveForListItems()
 
                         currentTrackByMusId?.musicTrackId?.let {
@@ -908,6 +896,7 @@ class ServicePlay : Service(),
     }
 
     private suspend fun setInactiveForListItems() {
+        
         databaseMusic.getPlaylistByActive(1)?.let {
             it.forEach { track ->
                 track.active = 0
