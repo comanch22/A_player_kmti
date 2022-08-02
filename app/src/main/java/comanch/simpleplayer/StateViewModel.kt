@@ -133,6 +133,7 @@ class StateViewModel @Inject constructor(
                     val item = MusicTrack()
                     item.myCopy(it)
                     item.active = it.active
+                    item.isPlaying = it.isPlaying
                     item.isButtonPlayVisible = it.isButtonPlayVisible
                     item.playListName = StringKey.currentList
                     insertList.add(item)
@@ -153,16 +154,18 @@ class StateViewModel @Inject constructor(
                     val item = MusicTrack()
                     item.myCopy(it)
                     item.active = it.active
+                    item.isPlaying = it.isPlaying
                     item.isButtonPlayVisible = it.isButtonPlayVisible
                     item.playListName = StringKey.currentList
                     insertList.add(item)
                 }
-                databaseMusic.listDelByNameInsByList(StringKey.currentList, insertList.toList())
+                databaseMusic.listDelByNameInsByList(StringKey.currentList, insertList)
+               // databaseMusic.insertPlayList(shuffleList)
             }
         }
     }
 
-    fun setCurrentPlaylist(list: List<MusicTrack>) {
+    fun setCurrentPlaylist(list: List<MusicTrack>, isAddToList: Boolean = false) {
 
         clearMusicActiveList()
 
@@ -178,7 +181,9 @@ class StateViewModel @Inject constructor(
             }
 
             if (insertList.isNotEmpty()) {
-                databaseMusic.deletePlaylist(StringKey.currentList)
+                if (!isAddToList) {
+                    databaseMusic.deletePlaylist(StringKey.currentList)
+                }
                 databaseMusic.insertPlayList(insertList.toList())
             }
 
@@ -190,10 +195,10 @@ class StateViewModel @Inject constructor(
                 _navigationToPlay.value = LiveDataEvent(1)
             }
 
-            setStartPlay = if (insertList.isNotEmpty()) {
-                2
-            } else {
-                1
+            setStartPlay = when{
+                insertList.isEmpty() && !isAddToList -> 1
+                insertList.isNotEmpty() && !isAddToList -> 2
+                else -> 3
             }
         }
     }

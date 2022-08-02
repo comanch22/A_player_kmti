@@ -83,7 +83,6 @@ class ServicePlay : Service(),
     private var context: Context? = null
     private var currentTrack: MusicTrack? = null
     private var isRepeat: Int = 0
-    private var databaseIsBlock = false
 
     private val metadataBuilder: MediaMetadataCompat.Builder = MediaMetadataCompat.Builder()
     private val stateBuilder = PlaybackStateCompat.Builder()
@@ -345,7 +344,6 @@ class ServicePlay : Service(),
         if (keyArt != null) {
             try {
                 metadataBuilder.putBitmap(MediaMetadataCompat.METADATA_KEY_ART, keyArt)
-                //  metadataBuilder.putBitmap(MediaMetadataCompat.METADATA_KEY_ALBUM_ART, keyArt)
             } catch (e: Exception) {
                 //
             }
@@ -704,10 +702,10 @@ class ServicePlay : Service(),
                 val mCoroutineScope = CoroutineScope(newJob + Dispatchers.IO)
                 mCoroutineScope.launch {
 
-                    if (databaseIsBlock) {
+   /*                 if (databaseIsBlock) {
                         delay(100)
                     }
-                    databaseIsBlock = true
+                    databaseIsBlock = true*/
 
                     if (databaseMusic.getCount() == 0) {
                         setNoneState()
@@ -716,20 +714,20 @@ class ServicePlay : Service(),
 
                     if (databaseMusic.getFirstActive() == null) {
                         playFirstItem()
-                        databaseIsBlock = false
+                     //   databaseIsBlock = false
                         return@launch
                     } else {
                         if (databaseMusic.getPlaylistByActive(1)?.size == 1
                         ) {
                             playOnlyOneActiveItem()
-                            databaseIsBlock = false
+                          //  databaseIsBlock = false
                             return@launch
                         }
                     }
 
                     currentTrack = databaseMusic.getFirstActive()
                     if (currentTrack == null) {
-                        databaseIsBlock = false
+                      //  databaseIsBlock = false
                         return@launch
                     }
 
@@ -746,12 +744,14 @@ class ServicePlay : Service(),
                         val item = MusicTrack()
                         item.myCopy(it)
                         item.active = it.active
+                        item.isPlaying = false
                         item.playListName = StringKey.currentList
                         insertList.add(item)
                     }
 
                     databaseMusic.listDelByNameInsByList(StringKey.currentList, insertList)
-                    databaseIsBlock = false
+                    currentTrack?.isPlaying = true
+                    databaseMusic.update(currentTrack!!)
                     localBroadcastManager?.sendBroadcast(Intent(StringKey.UpdateCurrentTrack))
                 }
             }
@@ -765,11 +765,6 @@ class ServicePlay : Service(),
 
                     val mediaSessionState = mediaSession?.controller?.playbackState?.state
 
-                    if (databaseIsBlock) {
-                        delay(100)
-                    }
-                    databaseIsBlock = true
-
                     if (databaseMusic.getCount() == 0) {
                         setNoneState()
                         return@launch
@@ -779,27 +774,19 @@ class ServicePlay : Service(),
                         currentTrack?.let {
                             it.active = 1
                             databaseMusic.update(it)
-                            databaseIsBlock = false
                             localBroadcastManager?.sendBroadcast(Intent(StringKey.UpdateCurrentTrack))
                             return@launch
                         }
                     }
 
                     var currentTrackByMusId =
-                        currentTrack?.musicId?.let { databaseMusic.getTrackByMusicID(it) }
-
+                        databaseMusic.getIsPlaying()
                     if (currentTrackByMusId == null &&
                         (mediaSessionState != PlaybackStateCompat.STATE_PLAYING ||
                                 mediaSessionState != PlaybackStateCompat.STATE_PAUSED)
                     ) {
                         currentTrackByMusId = databaseMusic.getFirstActive()
-                        databaseMusic.getPlaylistByActive(1)?.let {
-                            it.forEach { track ->
-                                track.active = 0
-                                track.isButtonPlayVisible = 0
-                            }
-                            databaseMusic.updatePlayList(it)
-                        }
+                        setInactiveForListItems()
 
                         currentTrackByMusId?.musicTrackId?.let {
                             val nextActiveTrack = databaseMusic.getNextTrackByKey(it)
@@ -807,10 +794,11 @@ class ServicePlay : Service(),
                                 track.active = 1
                                 databaseMusic.update(track)
                                 mediaSessionSetStopped()
-                                databaseIsBlock = false
                                 return@launch
                             }
                         }
+                    } else {
+                        currentTrack = currentTrackByMusId
                     }
 
                     val nextTrack = currentTrackByMusId?.musicTrackId?.let {
@@ -819,13 +807,7 @@ class ServicePlay : Service(),
                         )
                     }
 
-                    databaseMusic.getPlaylistByActive(1)?.let {
-                        it.forEach { track ->
-                            track.active = 0
-                            track.isButtonPlayVisible = 0
-                        }
-                        databaseMusic.updatePlayList(it)
-                    }
+                    setInactiveForListItems()
 
                     if (nextTrack == null && mediaSessionState != PlaybackStateCompat.STATE_STOPPED) {
 
@@ -835,6 +817,9 @@ class ServicePlay : Service(),
                                 mediaSession?.controller?.transportControls?.stop()
                             }
                             1 -> {
+                                currentTrack?.isPlaying = false
+                                currentTrack?.active = 0
+                                databaseMusic.update(currentTrack!!)
                                 repeatList()
                             }
                             2 -> {
@@ -842,9 +827,14 @@ class ServicePlay : Service(),
                             }
                         }
                     } else {
-                        playNextTrack(nextTrack)
+                        currentTrack?.let {
+                            it.isPlaying = false
+                            it.active = 0
+                            if (databaseMusic.update(it) > 0) {
+                                playNextTrack(nextTrack)
+                            }
+                        }
                     }
-                    databaseIsBlock = false
                 }
             }
 
@@ -857,32 +847,20 @@ class ServicePlay : Service(),
 
                     val mediaSessionState = mediaSession?.controller?.playbackState?.state
 
-                    if (databaseIsBlock) {
-                        delay(100)
-                    }
-                    databaseIsBlock = true
-
                     if (databaseMusic.getCount() == 0) {
                         setNoneState()
                         return@launch
                     }
 
                     var currentTrackByMusId =
-                        currentTrack?.musicId?.let { databaseMusic.getTrackByMusicID(it) }
-
+                        databaseMusic.getIsPlaying()
                     if (currentTrackByMusId == null &&
                         (mediaSessionState != PlaybackStateCompat.STATE_PLAYING ||
                                 mediaSessionState != PlaybackStateCompat.STATE_PAUSED)
                     ) {
                         currentTrackByMusId = databaseMusic.getFirstActive()
 
-                        databaseMusic.getPlaylistByActive(1)?.let {
-                            it.forEach { track ->
-                                track.active = 0
-                                track.isButtonPlayVisible = 0
-                            }
-                            databaseMusic.updatePlayList(it)
-                        }
+                        setInactiveForListItems()
 
                         currentTrackByMusId?.musicTrackId?.let {
                             val previousActiveTrack = databaseMusic.getPreviousTrackByKey(it)
@@ -890,10 +868,11 @@ class ServicePlay : Service(),
                                 track.active = 1
                                 databaseMusic.update(track)
                                 mediaSessionSetStopped()
-                                databaseIsBlock = false
                                 return@launch
                             }
                         }
+                    } else {
+                        currentTrack = currentTrackByMusId
                     }
 
                     val previousTrack = currentTrackByMusId?.musicTrackId?.let {
@@ -902,13 +881,7 @@ class ServicePlay : Service(),
                         )
                     }
 
-                    databaseMusic.getPlaylistByActive(1)?.let {
-                        it.forEach { track ->
-                            track.active = 0
-                            track.isButtonPlayVisible = 0
-                        }
-                        databaseMusic.updatePlayList(it)
-                    }
+                    setInactiveForListItems()
 
                     if (previousTrack == null) {
                         currentTrack?.let {
@@ -917,16 +890,30 @@ class ServicePlay : Service(),
                             localBroadcastManager?.sendBroadcast(Intent(StringKey.UpdateCurrentTrack))
                         }
                     } else {
-                        currentTrack = previousTrack
-                        currentTrack?.let {
-                            it.active = 1
-                            databaseMusic.update(it)
-                            localBroadcastManager?.sendBroadcast(Intent(StringKey.UpdateCurrentTrack))
+                        currentTrack?.isPlaying = false
+                        currentTrack?.active = 0
+                        if (databaseMusic.update(currentTrack!!) > 0) {
+                            currentTrack = previousTrack
+                            currentTrack?.let {
+                                it.active = 1
+                                it.isPlaying = true
+                                databaseMusic.update(it)
+                                localBroadcastManager?.sendBroadcast(Intent(StringKey.UpdateCurrentTrack))
+                            }
                         }
                     }
-                    databaseIsBlock = false
                 }
             }
+        }
+    }
+
+    private suspend fun setInactiveForListItems() {
+        databaseMusic.getPlaylistByActive(1)?.let {
+            it.forEach { track ->
+                track.active = 0
+                track.isButtonPlayVisible = 0
+            }
+            databaseMusic.updatePlayList(it)
         }
     }
 
@@ -935,6 +922,7 @@ class ServicePlay : Service(),
         currentTrack = nextTrack
         currentTrack?.let {
             it.active = 1
+            it.isPlaying = true
             databaseMusic.update(it)
             localBroadcastManager?.sendBroadcast(Intent(StringKey.UpdateCurrentTrack))
         }
@@ -945,8 +933,8 @@ class ServicePlay : Service(),
         currentTrack = databaseMusic.getItemASC()
         currentTrack?.let {
             it.active = 1
+            it.isPlaying = true
             databaseMusic.update(it)
-            databaseIsBlock = false
             localBroadcastManager?.sendBroadcast(Intent(StringKey.UpdateCurrentTrack))
         }
     }
@@ -956,7 +944,6 @@ class ServicePlay : Service(),
         currentTrack?.let {
             it.active = 1
             databaseMusic.update(it)
-            databaseIsBlock = false
             localBroadcastManager?.sendBroadcast(Intent(StringKey.UpdateCurrentTrack))
         }
     }
@@ -977,6 +964,7 @@ class ServicePlay : Service(),
 
         currentTrack = databaseMusic.getFirstActive()
         currentTrack?.isButtonPlayVisible = 0
+        currentTrack?.isPlaying = true
         currentTrack?.let { databaseMusic.update(it) }
         localBroadcastManager?.sendBroadcast(Intent(StringKey.UpdateCurrentTrack))
     }
@@ -985,6 +973,7 @@ class ServicePlay : Service(),
 
         currentTrack = databaseMusic.getItemASC()
         currentTrack?.active = 1
+        currentTrack?.isPlaying = true
         currentTrack?.let { databaseMusic.update(it) }
         localBroadcastManager?.sendBroadcast(Intent(StringKey.UpdateCurrentTrack))
     }
@@ -992,7 +981,6 @@ class ServicePlay : Service(),
     private fun setNoneState() {
 
         currentTrack = null
-        databaseIsBlock = false
         mediaSession?.isActive = false
         mediaSession?.setPlaybackState(
             stateBuilder.setState(
@@ -1016,38 +1004,28 @@ class ServicePlay : Service(),
         val mCoroutineScope = CoroutineScope(newJob + Dispatchers.IO)
         mCoroutineScope.launch {
 
-            if (databaseIsBlock) {
-                delay(100)
-            }
-            databaseIsBlock = true
+            currentTrack?.isPlaying = false
             currentTrack?.active = 0
             currentTrack?.isButtonPlayVisible = 0
             currentTrack?.let { databaseMusic.update(it) }
-            databaseIsBlock = false
             currentTrack = null
         }
     }
 
-    private fun disableActiveItemsSetCurrentActive(musicId: String) {
+    private fun disableActiveItemsSetCurrentActive(id: Long) {
 
         val newJob = Job()
         job.add(newJob)
         val mCoroutineScope = CoroutineScope(newJob + Dispatchers.IO)
         mCoroutineScope.launch {
 
-            if (databaseIsBlock) {
-                delay(100)
-            }
-            databaseIsBlock = true
-
-            databaseMusic.getPlaylistByActiveWithOutItem(1, musicId)?.let {
+            databaseMusic.getPlaylistByActiveWithOutItem(1, id)?.let {
                 it.forEach { track ->
                     track.active = 0
                     track.isButtonPlayVisible = 0
                 }
                 databaseMusic.updatePlayList(it)
             }
-            databaseIsBlock = false
         }
     }
 
@@ -1088,13 +1066,8 @@ class ServicePlay : Service(),
                         val mCoroutineScope = CoroutineScope(newJob + Dispatchers.IO)
                         mCoroutineScope.launch {
 
-                            if (databaseIsBlock) {
-                                delay(100)
-                            }
-                            databaseIsBlock = true
                             mediaSession?.controller?.transportControls?.stop()
 
-                            databaseIsBlock = false
                         }
                     }
 
@@ -1106,17 +1079,17 @@ class ServicePlay : Service(),
                     val mCoroutineScope = CoroutineScope(newJob + Dispatchers.IO)
                     mCoroutineScope.launch {
 
-                        if (databaseIsBlock) {
-                            delay(100)
-                        }
-                        databaseIsBlock = true
-                        val id = intent.getStringExtra("id")
+                        currentTrack?.isPlaying = false
+                        currentTrack?.active = 0
+                        currentTrack?.let { databaseMusic.update(it) }
+                        val id = intent.getLongExtra("id", -1)
                         mMediaPlayer?.stop()
-                        if (id != null) {
+                        if (id > -1) {
                             disableActiveItemsSetCurrentActive(id)
-                            currentTrack = databaseMusic.getTrackByMusicID(id)
+                            currentTrack = databaseMusic.getItemById(id)
                         }
                         currentTrack?.active = 1
+                        currentTrack?.isPlaying = true
                         if (currentTrack?.let { databaseMusic.update(it) } != 0) {
                             currentTrack?.let {
                                 pausePosition = 0
@@ -1131,7 +1104,6 @@ class ServicePlay : Service(),
                                 localBroadcastManager?.sendBroadcast(Intent(StringKey.UpdateCurrentTrack))
                             }
                         }
-                        databaseIsBlock = false
                     }
                 }
                 StringKey.deleteTrack -> {
@@ -1159,6 +1131,11 @@ class ServicePlay : Service(),
                         StringKey.stopStart -> {
                             mediaSession?.controller?.transportControls?.stop()
                             mediaSession?.controller?.transportControls?.play()
+                        }
+                        StringKey.nothing -> {
+                            if (state != PlaybackStateCompat.STATE_PLAYING) {
+                                mediaSession?.controller?.transportControls?.play()
+                            }
                         }
                     }
                 }

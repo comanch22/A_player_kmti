@@ -21,6 +21,7 @@ class StringKey {
         const val deleteArray = "deleteArray"
         const val start = "start"
         const val stopStart = "stopStart"
+        const val nothing = "nothing"
         const val uri = "uri"
 
         const val playerPause = "pause"

@@ -4,6 +4,7 @@ import android.app.Notification
 import android.app.NotificationChannel
 import android.app.NotificationManager
 import android.content.Intent
+import android.content.pm.ActivityInfo
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import androidx.core.app.NotificationManagerCompat
@@ -64,6 +65,13 @@ class MainActivity : AppCompatActivity() {
                         NavigationCorrespondent.ListFragment
                     )
                 )
+            }
+        }
+        findNavController(R.id.nav_host_fragment).addOnDestinationChangedListener { _, destination, _ ->
+            if (destination.id == R.id.imageFragment) {
+                requestedOrientation = ActivityInfo.SCREEN_ORIENTATION_PORTRAIT
+            } else if (requestedOrientation != ActivityInfo.SCREEN_ORIENTATION_FULL_SENSOR) {
+                requestedOrientation = ActivityInfo.SCREEN_ORIENTATION_FULL_SENSOR
             }
         }
     }

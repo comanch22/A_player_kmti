@@ -17,6 +17,7 @@ class DefaultPreference @Inject constructor(private val preference: SharedPrefer
             when(key){
                 PreferenceKeys.isAutoScroll -> true
                 PreferenceKeys.screenSaverIsOn -> true
+                PreferenceKeys.addToList -> false
             else -> {
                 null
             }

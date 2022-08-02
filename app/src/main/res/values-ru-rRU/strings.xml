@@ -113,4 +113,5 @@
     <string name="license">лицензии</string>
     <string name="image_error">изображение заставки недоступно</string>
     <string name="triangle">&#9655;</string>
+    <string name="add_to_the_list">добавить в список</string>
 </resources>

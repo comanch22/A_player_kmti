@@ -295,6 +295,9 @@ class PlayFragment : Fragment() {
                     2 -> {
                         intent.putExtra(StringKey.startPlay, StringKey.stopStart)
                     }
+                    3 -> {
+                        intent.putExtra(StringKey.startPlay, StringKey.nothing)
+                    }
                 }
                 LocalBroadcastManager.getInstance(this.requireContext()).sendBroadcast(intent)
             }
@@ -412,7 +415,7 @@ class PlayFragment : Fragment() {
             timeToClick = Calendar.getInstance().timeInMillis
             content.getContentIfNotHandled()?.let {
                 val intent = Intent(StringKey.startPlayByItemButtonPlay)
-                intent.putExtra("id", it.musicId)
+                intent.putExtra("id", it.musicTrackId)
                 LocalBroadcastManager.getInstance(this.requireContext()).sendBroadcast(intent)
             }
         }

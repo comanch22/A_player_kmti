@@ -113,6 +113,9 @@ interface MusicTrackDAO {
     @Query("SELECT * FROM musicTrack_data_base WHERE active == 1 and playListName = :name ORDER BY musicTrackId ASC LIMIT 1 ")
     suspend fun getFirstActive(name: String = StringKey.currentList): MusicTrack?
 
+    @Query("SELECT * FROM musicTrack_data_base WHERE isPlaying == :b and playListName = :name ORDER BY musicTrackId ASC LIMIT 1 ")
+    suspend fun getIsPlaying(name: String = StringKey.currentList, b: Boolean = true): MusicTrack?
+
     @Query("DELETE FROM musicTrack_data_base WHERE playListName = :name")
     suspend fun deletePlaylist(name: String): Int
 
@@ -125,10 +128,10 @@ interface MusicTrackDAO {
         name: String = StringKey.currentList
     ): List<MusicTrack>?
 
-    @Query("SELECT * from musicTrack_data_base WHERE active = :active and musicId != :musicId and playListName = :name ORDER BY musicTrackId ASC")
+    @Query("SELECT * from musicTrack_data_base WHERE active = :active and musicTrackId != :id and playListName = :name ORDER BY musicTrackId ASC")
     suspend fun getPlaylistByActiveWithOutItem(
         active: Int,
-        musicId: String,
+        id: Long,
         name: String = StringKey.currentList
     ): List<MusicTrack>?
 

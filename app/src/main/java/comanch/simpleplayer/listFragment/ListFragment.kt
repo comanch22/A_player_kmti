@@ -26,6 +26,8 @@ import comanch.simpleplayer.helpers.NavigationCorrespondent
 import comanch.simpleplayer.interfaces.WorkMusicListFragment
 import comanch.simpleplayer.musicManagment.FoldersList
 import comanch.simpleplayer.musicManagment.MusicList
+import comanch.simpleplayer.preferences.DefaultPreference
+import comanch.simpleplayer.preferences.PreferenceKeys
 import dagger.hilt.android.AndroidEntryPoint
 import javax.inject.Inject
 
@@ -40,6 +42,9 @@ class ListFragment : Fragment(), WorkMusicListFragment {
     override var notifyAdapterPosition: (Int) -> Unit = ::notifyItem
 
     var adapter: ListItemAdapter? = null
+
+    @Inject
+    lateinit var preferences: DefaultPreference
 
     private lateinit var requestPermissionLauncher: ActivityResultLauncher<String>
 
@@ -102,6 +107,8 @@ class ListFragment : Fragment(), WorkMusicListFragment {
         binding.toolbar.setOnMenuItemClickListener {
             menuNavigation(it)
         }
+
+        binding.checkBox.isChecked = preferences.getBoolean(PreferenceKeys.addToList)
 
         viewModel.navigateToDetailFragment.observe(viewLifecycleOwner) { it ->
             it.getContentIfNotHandled()?.let {
@@ -169,7 +176,8 @@ class ListFragment : Fragment(), WorkMusicListFragment {
                         resultList.add(it)
                     }
                 }
-                stateViewModel.setCurrentPlaylist(resultList)
+                stateViewModel.setCurrentPlaylist(resultList,
+                    preferences.getBoolean(PreferenceKeys.addToList))
             }
         }
 
@@ -186,6 +194,10 @@ class ListFragment : Fragment(), WorkMusicListFragment {
 
         binding.play.setOnClickListener {
             stateViewModel.getMusicList()
+        }
+
+        binding.checkBox.setOnCheckedChangeListener{ _, isChecked ->
+           preferences.putBoolean(PreferenceKeys.addToList, isChecked)
         }
 
         return binding.root

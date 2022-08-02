@@ -12,6 +12,7 @@ class PreferenceKeys {
         const val screensaverDuration = "screensaverDuration"
         const val appStyle = "appStyle"
         const val screenSaverIsOn = "onScreenSaver"
+        const val addToList = "addToList"
         const val margin = "margin"
         const val screenSaverCategory = "screenSaverCategory"
     }

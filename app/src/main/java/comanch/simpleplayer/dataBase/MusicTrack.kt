@@ -47,7 +47,10 @@ data class MusicTrack(
     var position: Int = -1,
 
     @ColumnInfo(name = "isButtonPlayVisible")
-    var isButtonPlayVisible: Int = 0
+    var isButtonPlayVisible: Int = 0,
+
+    @ColumnInfo(name = "isPlaying")
+    var isPlaying: Boolean = false
 ) {
 
     override fun equals(other: Any?): Boolean {
