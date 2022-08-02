@@ -128,7 +128,7 @@ class ServicePlay : Service(),
             previewUri = Uri.parse(preferences.getString(PreferenceKeys.previewUri))
             setLargeIcon()
         } catch (e: Exception) {
-            //
+            Log.e("ServicePlay", "${e.message}")
         }
 
         keyArtUri = Uri.parse(preferences.getString(PreferenceKeys.playScreenUri))
@@ -204,7 +204,7 @@ class ServicePlay : Service(),
             try {
                 unregisterReceiver(becomingNoisyReceiver)
             } catch (e: Exception) {
-                //
+                Log.e("ServicePlay", "${e.message}")
             }
 
             pause()
@@ -274,7 +274,7 @@ class ServicePlay : Service(),
             try {
                 unregisterReceiver(becomingNoisyReceiver)
             } catch (e: Exception) {
-                //
+                Log.e("ServicePlay", "${e.message}")
             }
             this@ServicePlay.stopSelf()
 
@@ -298,7 +298,6 @@ class ServicePlay : Service(),
         override fun onSeekTo(pos: Long) {
 
             mMediaPlayer?.seekTo(pos.toInt())
-
             when (mediaSession?.controller?.playbackState?.state) {
                 PlaybackStateCompat.STATE_PAUSED -> {
                     mediaSession?.setPlaybackState(
@@ -322,7 +321,7 @@ class ServicePlay : Service(),
                     )
                 }
                 else -> {
-                    //
+                    TODO()
                 }
             }
         }
@@ -344,7 +343,7 @@ class ServicePlay : Service(),
             try {
                 metadataBuilder.putBitmap(MediaMetadataCompat.METADATA_KEY_ART, keyArt)
             } catch (e: Exception) {
-                //
+                Log.e("ServicePlay", "${e.message}")
             }
         }
         mediaSession?.setMetadata(metadataBuilder.build())
@@ -396,21 +395,18 @@ class ServicePlay : Service(),
 
         setSource()
 
-        when (mediaSession?.controller?.playbackState?.state) {
-            PlaybackStateCompat.STATE_PAUSED -> {
-                //
-            }
-            else -> {
-                preparePlayer()
-                mediaSession?.setPlaybackState(
-                    stateBuilder.setState(
-                        PlaybackStateCompat.STATE_PLAYING,
-                        pausePosition.toLong(),
-                        1F
-                    ).build()
-                )
-            }
+        if(mediaSession?.controller?.playbackState?.state !=
+            PlaybackStateCompat.STATE_PAUSED){
+            preparePlayer()
+            mediaSession?.setPlaybackState(
+                stateBuilder.setState(
+                    PlaybackStateCompat.STATE_PLAYING,
+                    pausePosition.toLong(),
+                    1F
+                ).build()
+            )
         }
+
         updateMetadata()
         this@ServicePlay.startForeground(
             notificationId,
@@ -484,7 +480,7 @@ class ServicePlay : Service(),
         try {
             localBroadcastManager?.unregisterReceiver(updateDataReceiver)
         } catch (e: Exception) {
-            //
+            Log.e("ServicePlay", "${e.message}")
         }
         super.onDestroy()
     }
@@ -666,7 +662,7 @@ class ServicePlay : Service(),
                         }
 
                         override fun onLoadCleared(placeholder: Drawable?) {
-                            //
+                            TODO()
                         }
 
                     })
@@ -686,7 +682,7 @@ class ServicePlay : Service(),
                     .notify(notificationId, getNotification(it))
             }
         } catch (e: Exception) {
-
+            Log.e("ServicePlay", "${e.message}")
         }
     }
 
@@ -896,7 +892,7 @@ class ServicePlay : Service(),
     }
 
     private suspend fun setInactiveForListItems() {
-        
+
         databaseMusic.getPlaylistByActive(1)?.let {
             it.forEach { track ->
                 track.active = 0
@@ -982,7 +978,7 @@ class ServicePlay : Service(),
         try {
             unregisterReceiver(becomingNoisyReceiver)
         } catch (e: Exception) {
-            //
+            Log.e("ServicePlay", "${e.message}")
         }
     }
 
@@ -1166,12 +1162,12 @@ class ServicePlay : Service(),
                     }
 
                     override fun onLoadCleared(placeholder: Drawable?) {
-                        //
+                        TODO()
                     }
 
                 })
         } catch (e: Exception) {
-            //
+            Log.e("ServicePlay", "${e.message}")
         }
     }
 }
