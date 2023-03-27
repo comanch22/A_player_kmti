@@ -534,7 +534,6 @@ class PlayFragment : Fragment() {
                 mediaController?.transportControls?.play()
             }
         }
-
         binding.pause.setOnClickListener {
 
             timeToClick = Calendar.getInstance().timeInMillis
